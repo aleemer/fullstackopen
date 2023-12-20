@@ -25,9 +25,7 @@ import { useState } from 'react'
 const App = (props) => {
   const [ counter, setCounter ] = useState(0);
 
-  setTimeout(
-    () => setCounter(counter + 1), 1000
-  )
+  console.log('rendering...', counter);
 
   const name = 'Peter';
   const age = 10;
@@ -40,6 +38,12 @@ const App = (props) => {
       <Footer />
       <h2>Counter</h2>
       <div>{counter}</div>
+      <button onClick={() => setCounter(counter + 1)}>
+        plus
+      </button>
+      <button onClick={() => setCounter(0)}>
+        zero
+      </button>
     </div>
   )
 }
