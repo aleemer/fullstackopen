@@ -1,14 +1,24 @@
 import { useState } from 'react'
 
 const Statistics = (props) => {
+  const show = props.good !== 0 || props.neutral !== 0 || props.bad !== 0;
   return (
     <div>
-      <h2>statistics</h2>
-      <p>good {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad {props.bad}</p>
-      <p>all {props.good + props.neutral + props.bad}</p>
-      <p>positive {props.good/(props.good+props.neutral+props.bad) * 100}%</p>
+      {show ?
+      <>
+        <h2>statistics</h2>
+        <p>good {props.good}</p>
+        <p>neutral {props.neutral}</p>
+        <p>bad {props.bad}</p>
+        <p>all {props.good + props.neutral + props.bad}</p>
+        <p>positive {props.good/(props.good+props.neutral+props.bad) * 100}%</p>
+      </> 
+      :
+      <>
+        <h2>statistics</h2>
+        <p>No feedback given</p>
+      </>
+      }
     </div>
   )
 }
@@ -20,19 +30,19 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   // handles when user clicks 'good'
-  const handleClickGood = (e) => {
+  const handleClickGood = () => {
     console.log('clicked good');
     setGood(good + 1);
   }
 
   // handles when user clicks 'neutral'
-  const handleClickNeutral = (e) => {
+  const handleClickNeutral = () => {
     console.log('clicked neutral');
     setNeutral(neutral + 1)
   }
 
   // handles when user clicks 'bad'
-  const handleClickBad = (e) => {
+  const handleClickBad = () => {
     console.log('clicked bad');
     setBad(bad + 1);
   }
