@@ -20,21 +20,15 @@ const Footer = () => {
   )
 }
 
-const Display = (props) => {
+const Display = ({ counter }) => {
   return (
     <div>
-      {props.counter}
+      {counter}
     </div>
   )
 }
 
-const Button = (props) => {
-  return (
-    <button onClick={props.onClick}>
-      {props.text}
-    </button>
-  )
-}
+const Button = ({text, onClick}) => <button onClick={onClick}>{text}</button>
 
 import { useState } from 'react'
 
@@ -66,6 +60,7 @@ const App = (props) => {
       <Footer />
       <h2>Counter</h2>
       <Display counter={counter}/>
+      <Button text={'thousand'} onClick={() => setCounter(1000)} />
       <Button text={'plus'} onClick={increaseByOne} />
       <Button text={'zero'} onClick={setToZero} />
       <Button text={'minus'} onClick={decreaseByOne} />
