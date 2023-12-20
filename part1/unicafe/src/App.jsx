@@ -9,16 +9,19 @@ const App = () => {
   // handles when user clicks 'good'
   const handleClickGood = (e) => {
     console.log('clicked good');
+    setGood(good + 1);
   }
 
   // handles when user clicks 'neutral'
   const handleClickNeutral = (e) => {
     console.log('clicked neutral');
+    setNeutral(neutral + 1)
   }
 
   // handles when user clicks 'bad'
   const handleClickBad = (e) => {
     console.log('clicked bad');
+    setBad(bad + 1);
   }
 
   return (
