@@ -1,4 +1,28 @@
+
 const App = () => {
+
+  const Header = (props) => {
+    return (
+      <h1></h1>
+    )
+  }
+
+  const Content = () => {
+    return (
+      <div>
+
+      </div>
+    )
+  }
+
+  const Total = () => {
+    return (
+      <div>
+        
+      </div>
+    )
+  }
+
   const course = 'Half Stack application development'
   const part1 = 'Fundamentals of React'
   const exercises1 = 10
