@@ -45,6 +45,7 @@ const App = (props) => {
 
   const increaseByOne = () => setCounter(counter + 1)
   const setToZero = () => setCounter(0);
+  const decreaseByOne = () => setCounter(counter - 1);
 
   const name = 'Peter';
   const age = 10;
@@ -59,6 +60,7 @@ const App = (props) => {
       <Display counter={counter}/>
       <Button text={'plus'} onClick={increaseByOne} />
       <Button text={'zero'} onClick={setToZero} />
+      <Button text={'minus'} onClick={decreaseByOne} />
     </div>
   )
 }
