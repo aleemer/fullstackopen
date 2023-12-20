@@ -20,12 +20,31 @@ const Footer = () => {
   )
 }
 
+const Display = (props) => {
+  return (
+    <div>
+      {props.counter}
+    </div>
+  )
+}
+
+const Button = (props) => {
+  return (
+    <button onClick={props.onClick}>
+      {props.text}
+    </button>
+  )
+}
+
 import { useState } from 'react'
 
 const App = (props) => {
   const [ counter, setCounter ] = useState(0);
 
   console.log('rendering...', counter);
+
+  const increaseByOne = () => setCounter(counter + 1)
+  const setToZero = () => setCounter(0);
 
   const name = 'Peter';
   const age = 10;
@@ -37,13 +56,9 @@ const App = (props) => {
       <Hello name={name} age={age}/>
       <Footer />
       <h2>Counter</h2>
-      <div>{counter}</div>
-      <button onClick={() => setCounter(counter + 1)}>
-        plus
-      </button>
-      <button onClick={() => setCounter(0)}>
-        zero
-      </button>
+      <Display counter={counter}/>
+      <Button text={'plus'} onClick={increaseByOne} />
+      <Button text={'zero'} onClick={setToZero} />
     </div>
   )
 }
