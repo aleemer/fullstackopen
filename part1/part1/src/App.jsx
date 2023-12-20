@@ -1,7 +1,6 @@
 
 const Hello = (props) => {
-  const name = props.name;
-  const age = props.age;
+  const { name, age } = props;
 
   const bornYear = () => new Date().getFullYear() - age 
 
@@ -21,7 +20,15 @@ const Footer = () => {
   )
 }
 
-const App = () => {
+import { useState } from 'react'
+
+const App = (props) => {
+  const [ counter, setCounter ] = useState(0);
+
+  setTimeout(
+    () => setCounter(counter + 1), 1000
+  )
+
   const name = 'Peter';
   const age = 10;
 
@@ -31,6 +38,8 @@ const App = () => {
       <Hello name={'Maya'} age={26 + 10}/>
       <Hello name={name} age={age}/>
       <Footer />
+      <h2>Counter</h2>
+      <div>{counter}</div>
     </div>
   )
 }
