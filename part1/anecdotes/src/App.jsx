@@ -23,12 +23,23 @@ const App = () => {
     setSelected(randomChoice);
   }
 
+  const getFavAnecdote = () => {
+    const favAnecdote = anecdotes.reduce((maxAnecdote, currentAnecdote) => {
+      return currentAnecdote.votes > maxAnecdote.votes ? currentAnecdote : maxAnecdote
+    }, anecdotes[0]);
+    return favAnecdote;
+  }
+
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       <p>{anecdotes[selected].text}</p>
       <p>has {anecdotes[selected].votes} votes</p>
       <button onClick={handleClickVote}>vote</button>
       <button onClick={handleClickNext}>next ancedote</button>
+      <h2>Anecdote with most votes</h2>
+      <p>{getFavAnecdote().text}</p>
+      <p>has {getFavAnecdote().votes} votes</p>
     </div>
   )
 }
