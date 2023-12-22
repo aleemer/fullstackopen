@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Filter from './components/Filter'
+import PersonForm from './components/PersonForm';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -9,8 +10,6 @@ const App = () => {
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ])
   const [filter, setFilter] = useState('');
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('');
 
   const handleFilterChange = (e) => {
     e.preventDefault();
@@ -32,26 +31,14 @@ const App = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (nameConflict(newName)) {
-      alert(`${newName} is already added to the phonebook`);
-      setNewName('');
-      setNewNumber('');
+    const name = e.target.name.value;
+    const number = e.target.number.value;
+    if (nameConflict(name)) {
+      alert(`${name} is already added to the phonebook`);
     } else {
-      const newPerson = { name: newName, number: newNumber }
+      const newPerson = { id: persons.length + 1, name, number }
       setPersons(persons.concat(newPerson));
-      setNewName('');
-      setNewNumber('');
     }
-  }
-
-  const handleNameChange = (e) => {
-    e.preventDefault();
-    setNewName(e.target.value);
-  }
-
-  const handleNumberChange = (e) => {
-    e.preventDefault();
-    setNewNumber(e.target.value);
   }
 
   return (
@@ -59,13 +46,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filter={filter} onFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
-      <form onSubmit={handleFormSubmit}>
-        <div> name: <input value={newName} onChange={handleNameChange}/> </div>
-        <div> number: <input value={newNumber} onChange={handleNumberChange}/> </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm onFormSubmit={handleFormSubmit}/>
       <h2>Numbers</h2>
       {peopleToShow.map(person => <p key={person.id}>{person.name} {person.number}</p>)}
     </div>
