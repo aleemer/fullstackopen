@@ -8,13 +8,15 @@ const App = (props) => {
   const [newNote, setNewNote] = useState('a new note...');
   const [showAll, setShowAll] = useState(true);
 
-  useEffect(() => {
+  const syncData = () => {
     axios
     .get('http://localhost:3001/notes')
     .then(response => {
       setNotes(response.data)
     })
-  }, [])
+  }
+
+  useEffect(syncData, [])
 
   const addNote = (e) => {
     e.preventDefault();
