@@ -12,6 +12,7 @@ const App = (props) => {
   const syncData = () => {
     noteService.getAll()
       .then(initialNotes => setNotes(initialNotes))
+      .catch((error) => console.log('error in sync ', error));
   }
 
   useEffect(syncData, [])
@@ -29,6 +30,7 @@ const App = (props) => {
         syncData();
         setNewNote('a new note...');
       })
+      .catch((error) => console.log('error in create ', error));
   }
 
   const handleNoteChange = (e) => {
@@ -43,7 +45,8 @@ const App = (props) => {
 
     noteService
       .update(id, changedNote)
-      .then(() => syncData());
+      .then(() => syncData())
+      .catch((error) => console.log('error in update ', error))
   }
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important)
