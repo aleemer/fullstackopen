@@ -23,15 +23,14 @@ const Total = ({ total }) => {
 }
 
 const Content = ({ parts }) => {
+  console.log('course parts', parts);
   const calculateSum = () => {
     return parts.reduce((prevVal, currVal) => prevVal + currVal.exercises, 0);
   }
 
   return (
     <div>
-      <Part part={parts[0]} />
-      <Part part={parts[1]} />
-      <Part part={parts[2]} />
+      {parts.map(part => <Part part={part}/>)}
       <Total total={calculateSum()} />
     </div>
   )
