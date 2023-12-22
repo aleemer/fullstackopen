@@ -24,6 +24,11 @@
       "id": 5,
       "content": "PUT is used to update a resource",
       "important": true
+    },
+    {
+      "id": 6,
+      "content": "tst",
+      "important": true
     }
   ]
 }
