@@ -11,9 +11,7 @@ const App = (props) => {
 
   const syncData = () => {
     noteService.getAll()
-      .then(response => {
-        setNotes(response.data)
-    })
+      .then(initialNotes => setNotes(initialNotes))
   }
 
   useEffect(syncData, [])
