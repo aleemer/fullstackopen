@@ -16,6 +16,12 @@ const App = (props) => {
     })
   }
 
+  const sendData = (note) => {
+    axios
+      .post('http://localhost:3001/notes', note)
+      .then(() => syncData());
+  }
+
   useEffect(syncData, [])
 
   const addNote = (e) => {
@@ -25,7 +31,7 @@ const App = (props) => {
       content: newNote,
       important: Math.random() < 0.5
     }
-    setNotes(notes.concat(noteObject));
+    sendData(noteObject);
     setNewNote('a new note...');
   }
 
