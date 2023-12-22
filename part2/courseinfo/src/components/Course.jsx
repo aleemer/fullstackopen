@@ -14,33 +14,36 @@ const Part = ({ part }) => {
   )
 }
 
+const Total = ({ total }) => {
+  return (
+    <div>
+      <p><strong>total of {total} exercises</strong></p>
+    </div>
+  )
+}
+
 const Content = ({ parts }) => {
+  const calculateSum = () => {
+    return parts.reduce((prevVal, currVal) => prevVal + currVal.exercises, 0);
+  }
+
   return (
     <div>
       <Part part={parts[0]} />
       <Part part={parts[1]} />
       <Part part={parts[2]} />
+      <Total total={calculateSum()} />
     </div>
   )
 }
 
-// TODO
-// const Total = (props) => {
-//   return (
-//     <div>
-//       <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
-//     </div>
-//   )
-// }
-
 const Course = ({ course }) => {
-    return (
-        <div>
-            <Header name={course.name}/>
-            <Content parts={course.parts} />
-            
-        </div>
-    )
+  return (
+      <div>
+          <Header name={course.name}/>
+          <Content parts={course.parts} />
+      </div>
+  )
 }
 
 export default Course;
