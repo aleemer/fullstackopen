@@ -8,19 +8,21 @@ const App = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log('clicked submit');
+    const newPerson = { name: newName }
+    setPersons(persons.concat(newPerson));
+    setNewName('');
   }
 
   const handleNameChange = (e) => {
     e.preventDefault();
-    console.log('typing...');
+    setNewName(e.target.value);
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={handleFormSubmit}>
-        <div> name: <input onChange={handleNameChange}/> </div>
+        <div> name: <input value={newName} onChange={handleNameChange}/> </div>
         <div>
           <button type="submit">add</button>
         </div>
