@@ -40,6 +40,16 @@ const App = (props) => {
     setNewNote(e.target.value);
   }
 
+  const handleImportantClick = (e, id) => {
+    e.preventDefault();
+    const url = `http://localhost:3001/notes/${id}`
+    const note = notes.find(n => n.id === id);
+    const changedNote = { ...note, important: !note.important }
+
+    axios.put(url, changedNote)
+      .then(() => syncData());
+  }
+
   const notesToShow = showAll ? notes : notes.filter((note) => note.important)
 
   return (
@@ -52,7 +62,7 @@ const App = (props) => {
       </div>
       <ul>
         {notesToShow.map(note => 
-          <Note key={note.id} note={note} />
+          <Note key={note.id} note={note} onImportantClick={handleImportantClick} />
         )}
       </ul>
       <form onSubmit={addNote}>
