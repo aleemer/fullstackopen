@@ -29,7 +29,7 @@ const App = () => {
     e.preventDefault();
     const name = e.target.name.value;
     const number = e.target.number.value;
-    phoneUtils.clearFields(e);
+    phoneUtils.clearFields(e, ['name', 'number']);
     if (phoneUtils.nameConflict(name, persons)) {
       alert(`${name} is already added to the phonebook`);
     } else {
@@ -38,6 +38,13 @@ const App = () => {
         .create(newPerson)
         .then(() => syncData());
     }
+  }
+
+  const handleDeleteClick = (e, id) => {
+    e.preventDefault();
+    phoneServices
+      .deletePerson(id)
+      .then(() => syncData());
   }
 
   return (
@@ -50,7 +57,7 @@ const App = () => {
       {peopleToShow.map(person => 
       <p key={person.id}>
         {person.name} {person.number}
-        <button>delete</button>
+        <button onClick={(e) => handleDeleteClick(e, person.id)}>delete</button>
       </p>)}
     </div>
   )

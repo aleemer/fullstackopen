@@ -7,9 +7,10 @@ const nameConflict = (name, persons) => {
   return false;
 }
 
-const clearFields = (e) => {
-  e.target.name.value = '';
-  e.target.number.value = '';
+const clearFields = (e, names) => {
+  names.forEach((name) => {
+    e.target[name].value = ''
+  })
 }
 
 export default { nameConflict, clearFields }
