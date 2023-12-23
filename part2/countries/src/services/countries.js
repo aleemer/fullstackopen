@@ -7,6 +7,7 @@ const parseData = (elem) => {
     return {
       name: elem.name.common ? elem.name.common : 'unknown',
       capital: elem.capital ? elem.capital[0] : 'unknown',
+      area: elem.area ? elem.area : 'unknown',
       languages: elem.languages ? Object.values(elem.languages) : 'unknown',
       flag: elem.flags.png ? elem.flags.png : 'unknown',
       geo: elem.capitalInfo.latlng ? elem.capitalInfo.latlng : 'unknown'

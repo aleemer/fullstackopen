@@ -1,15 +1,22 @@
-const CountrySimple = () => {
+const CountrySimple = ({ country }) => {
   return (
     <div>
-      Country simple
+      {country.name}
     </div>
   )
 }
 
-const CountryDetailed = () => {
+const CountryDetailed = ({ country }) => {
   return (
     <div>
-      Country detailed
+      <h2>{country.name}</h2>
+      <p>capital {country.capital}</p>
+      <p>area {country.area}</p>
+      <h3>languages:</h3>
+      <ul>
+        {country.languages.map(language => <li>{language}</li>)}
+      </ul>
+      <img src={country.flag}/>
     </div>
   )
 }
