@@ -54,6 +54,26 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+// Server endpoint to handle POST requests
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+
+  const person = {
+    id: persons.length + 1,
+    name: body.name,
+    number: body.number
+  }
+
+  persons = persons.concat(person)
+  response.status(200).json(person)
+})
+
 // Server endpoint to handle DELETE requests to '/api/persons/something'
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
