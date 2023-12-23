@@ -57,7 +57,11 @@ const App = () => {
       const newPerson = { id: persons.length + 1, name, number }
       phoneServices
         .create(newPerson)
-        .then(() => syncData());
+        .then(() => {
+          syncData();
+          setMessage({ content: `added ${newPerson.name}`, error: false })
+          messageTimeout(2500);
+        });
     }
   }
 
