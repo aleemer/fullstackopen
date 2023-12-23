@@ -13,6 +13,12 @@ const App = () => {
       .then((response) => setPersons(response.data));
   }
 
+  const sendData = (person) => {
+    axios
+      .post('http://localhost:3001/persons', person)
+      .then(() => syncData());
+  }
+
   useEffect(syncData, []);
 
   const handleFilterChange = (e) => {
@@ -41,7 +47,7 @@ const App = () => {
       alert(`${name} is already added to the phonebook`);
     } else {
       const newPerson = { id: persons.length + 1, name, number }
-      setPersons(persons.concat(newPerson));
+      sendData(newPerson);
     }
   }
 
