@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import countryServices from './services/countries';
 import Search from './components/Search';
+import Countries from './components/Countries';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -21,9 +21,19 @@ const App = () => {
     setSearch(e.target.value);
   }
 
+  const applySearch = () => {
+    const searchTerm = search.trim().toLowerCase();
+    if (searchTerm === '') {
+      return [];
+    } else {
+      return countries.filter(country => country.name.includes(searchTerm));
+    }
+  }
+
   return (
     <div>
       <Search search={search} onSearchUpdate={handleSearchUpdate} />
+      <Countries countries={applySearch()}/>
     </div>
   )
 }

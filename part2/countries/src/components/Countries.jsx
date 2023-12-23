@@ -14,10 +14,12 @@ const CountryDetailed = () => {
   )
 }
 
-const Countries = () => {
+const Countries = ({ countries }) => {
+  const length = countries.length;
+
   return (
     <div>
-      Countries
+      Country
     </div>
   )
 }
