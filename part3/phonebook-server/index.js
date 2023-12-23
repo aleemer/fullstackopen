@@ -1,7 +1,18 @@
 const express = require('express')
 const app = express()
 
+// Middleware -> our functions for middleware need to be taken into use before routes if we want them to be executed before the route event handlers are called
 app.use(express.json()) // Allows us to parse requests with JSON data
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger);
 
 let persons = [
   { 
@@ -87,6 +98,14 @@ app.delete('/api/persons/:id', (request, response) => {
 
   response.status(204).end()
 })
+
+// Middleware to handle requests made to non-existent routes
+// Necessary to put this after all routes -> this will run if nothing is caught previously!
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint '})
+}
+
+app.use(unknownEndpoint);
 
 // Server endpoint to handle GET requests to '/'
 const PORT = 3001
