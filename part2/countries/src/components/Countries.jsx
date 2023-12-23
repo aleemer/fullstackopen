@@ -1,4 +1,5 @@
 const CountrySimple = ({ country }) => {
+  console.log('simple ', country);
   return (
     <div>
       {country.name}
@@ -7,6 +8,7 @@ const CountrySimple = ({ country }) => {
 }
 
 const CountryDetailed = ({ country }) => {
+  console.log('detailed ', country);
   return (
     <div>
       <h2>{country.name}</h2>
@@ -32,7 +34,23 @@ const Countries = ({ countries }) => {
     )
   }
 
-  return simpleDisplay();
+  const detailedDisplay = () => {
+    return (
+      <div>
+        {countries.map(country => <CountryDetailed key={country.id} country={country}/>)}
+      </div>
+    )
+  }
+
+  if (length === 1) {
+    return detailedDisplay();
+  } else if (length <= 10) {
+    return simpleDisplay();
+  } else {
+    return (
+      <div>Too many matches, specify another filter</div>
+    )
+  }
 }
 
 export default Countries
