@@ -52,6 +52,10 @@ const App = () => {
         phoneServices
           .updateNumber(updateId, updatePerson)
           .then(() => syncData())
+          .catch((error) => {
+            setMessage({ content: `Information of ${updatePerson.name} has already been removed from server`, error: true })
+            messageTimeout(5000);
+          })
       }
     } else {
       const newPerson = { id: persons.length + 1, name, number }
