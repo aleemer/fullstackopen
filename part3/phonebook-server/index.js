@@ -26,6 +26,17 @@ const persons = [
   }
 ]
 
+// Server endpoint to handle info page
+app.get('/info', (request, response) => {
+  const info = `
+    <div>
+      <p>Phonebook has info for ${persons.length} people</p>
+      <p>${new Date()}</p>
+    </div>
+  `
+  response.send(info)
+})
+
 // Server endpoint to handle GET requests to '/api/persons'
 app.get('/api/persons', (request, response) => {
   response.json(persons)
