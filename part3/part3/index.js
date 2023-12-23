@@ -43,17 +43,30 @@ app.get('/api/notes/:id', (request, response) => {
   }
 })
 
+const generateId = () => {
+  const maxId = notes.length > 0
+    ? Math.max(...notes.map(n => n.id))
+    : 0
+  return maxId + 1
+}
+
 // Server endpoint to handle all POST requests
 app.post('/api/notes', (request, response) => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(n => n.id)) 
-    : 0
+  const body = request.body
 
-  const note = request.body
-  note.id = maxId + 1
+  if (!body.content) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+
+  const note = {
+    id: generateId(),
+    content: body.content,
+    important: Boolean(body.important) || false
+  }
 
   notes = notes.concat(note)
-
   response.json(note)
 })
 
