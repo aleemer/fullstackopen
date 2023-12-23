@@ -1,18 +1,12 @@
 const express = require('express')
+const morgan = require('morgan');
 const app = express()
 
 // Middleware -> our functions for middleware need to be taken into use before routes if we want them to be executed before the route event handlers are called
 app.use(express.json()) // Allows us to parse requests with JSON data
 
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
-
-app.use(requestLogger);
+// tiny morgan
+app.use(morgan('tiny'));
 
 let persons = [
   { 
