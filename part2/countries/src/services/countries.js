@@ -1,6 +1,14 @@
 import axios from 'axios';
 
+const apiKey = import.meta.env.VITE_WEATHER_API_KEY
 const restCountriesURL = 'https://studies.cs.helsinki.fi/restcountries'
+const weatherDataBaseURL = `https://api.openweathermap.org/data/2.5/weather?`;
+
+const fetchWeatherData = (geo) => {
+  const weatherDataURL = `${weatherDataBaseURL}lat=${geo[0]}&lon=${geo[1]}&appid=${apiKey}`
+  const request = axios.get(weatherDataURL);
+  return request.then(response => response.data)
+}
 
 const parseData = (elem) => {
   if (elem) {
@@ -11,7 +19,7 @@ const parseData = (elem) => {
       area: elem.area ? elem.area : 'unknown',
       languages: elem.languages ? Object.values(elem.languages) : 'unknown',
       flag: elem.flags.png ? elem.flags.png : 'unknown',
-      geo: elem.capitalInfo.latlng ? elem.capitalInfo.latlng : 'unknown'
+      geo: elem.capitalInfo.latlng ? elem.capitalInfo.latlng : 'unknown',
     }
   }
 }
@@ -23,4 +31,4 @@ const fetchAllData = () => {
   })
 }
 
-export default { fetchAllData }
+export default { fetchAllData, fetchWeatherData }
