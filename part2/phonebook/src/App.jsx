@@ -3,10 +3,21 @@ import phoneServices from './services/phone'
 import phoneUtils from './services/utils';
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filter, setFilter] = useState('');
+  const [message, setMessage] = useState({ content: '', error: false });
+
+  const messageTimeout = (timeout) => {
+    setTimeout(() => {
+      setMessage({
+        content: '',
+        error: false,
+      })
+    }, timeout)
+  }
 
   const syncData = () => {
     phoneServices
@@ -60,6 +71,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {message.content === '' ? null : <Notification message={message} />}
       <Filter filter={filter} onFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm onFormSubmit={handleFormSubmit}/>
