@@ -3,7 +3,7 @@ const app = express()
 
 app.use(express.json()) // Allows us to parse requests with JSON data
 
-const persons = [
+let persons = [
   { 
     "id": 1,
     "name": "Arto Hellas", 
@@ -52,6 +52,14 @@ app.get('/api/persons/:id', (request, response) => {
   } else {
     response.json(person);
   }
+})
+
+// Server endpoint to handle DELETE requests to '/api/persons/something'
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  persons = persons.filter(person => person.id !== id)
+
+  response.status(204).end()
 })
 
 // Server endpoint to handle GET requests to '/'
