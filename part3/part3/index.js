@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json()) // Allows us to parse requests with JSON data
+
 let notes = [
   {
     id: 1,
@@ -39,6 +41,20 @@ app.get('/api/notes/:id', (request, response) => {
   } else {
     response.status(404).end();
   }
+})
+
+// Server endpoint to handle all POST requests
+app.post('/api/notes', (request, response) => {
+  const maxId = notes.length > 0
+    ? Math.max(...notes.map(n => n.id)) 
+    : 0
+
+  const note = request.body
+  note.id = maxId + 1
+
+  notes = notes.concat(note)
+
+  response.json(note)
 })
 
 // Server endpoint to handle all DELETE requests of the form '/api/notes/something'
