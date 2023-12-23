@@ -5,6 +5,7 @@ const restCountriesURL = 'https://studies.cs.helsinki.fi/restcountries'
 const parseData = (elem) => {
   if (elem) {
     return {
+      id: Math.random() * 1000000,
       name: elem.name.common ? elem.name.common : 'unknown',
       capital: elem.capital ? elem.capital[0] : 'unknown',
       area: elem.area ? elem.area : 'unknown',

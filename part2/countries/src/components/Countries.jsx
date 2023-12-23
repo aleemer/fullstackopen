@@ -24,11 +24,15 @@ const CountryDetailed = ({ country }) => {
 const Countries = ({ countries }) => {
   const length = countries.length;
 
-  return (
-    <div>
-      Country
-    </div>
-  )
+  const simpleDisplay = () => {
+    return (
+      <div>
+        {countries.map(country => <CountrySimple key={country.id} country={country}/>)}
+      </div>
+    )
+  }
+
+  return simpleDisplay();
 }
 
 export default Countries
