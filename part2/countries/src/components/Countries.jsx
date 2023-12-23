@@ -1,7 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Country = ({ country, detailed}) => {
   const [show, setShow] = useState(detailed);
+
+  // Need to ensure that whenever 'detailed' changes, this is reflected in the state
+  // This is required because React may not be generating new components, instead re-using old ones!
+  useEffect(() => {
+    setShow(detailed)
+  }, [detailed])
 
   const handleToggle = (e) => {
     e.preventDefault()
