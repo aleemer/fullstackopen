@@ -22,7 +22,6 @@ const App = () => {
   }
 
   const applySearch = () => {
-    console.log('search being reapplied ', search);
     const searchTerm = search.trim().toLowerCase();
     if (searchTerm === '') {
       return [];
