@@ -31,7 +31,17 @@ const App = () => {
     const number = e.target.number.value;
     phoneUtils.clearFields(e, ['name', 'number']);
     if (phoneUtils.nameConflict(name, persons)) {
-      alert(`${name} is already added to the phonebook`);
+      if (window.confirm(`${name} is already added to the phonebook, replace the old number with a new one?`)) {
+        const personMatch = persons.find((person) => person.name === name);
+        const updateId = personMatch.id;
+        const updatePerson = {
+          ...personMatch,
+          number
+        }
+        phoneServices
+          .updateNumber(updateId, updatePerson)
+          .then(() => syncData())
+      }
     } else {
       const newPerson = { id: persons.length + 1, name, number }
       phoneServices
