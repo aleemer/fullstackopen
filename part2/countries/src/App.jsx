@@ -22,11 +22,12 @@ const App = () => {
   }
 
   const applySearch = () => {
+    console.log('search being reapplied ', search);
     const searchTerm = search.trim().toLowerCase();
     if (searchTerm === '') {
       return [];
     } else {
-      return countries.filter(country => country.name.includes(searchTerm));
+      return countries.filter(country => country.name.toLowerCase().includes(searchTerm));
     }
   }
 

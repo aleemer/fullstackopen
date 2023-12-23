@@ -42,7 +42,7 @@ const Countries = ({ countries }) => {
     )
   }
 
-  if (length === 1) {
+  if (length == 1) {
     return detailedDisplay();
   } else if (length <= 10) {
     return simpleDisplay();
