@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import phoneServices from './services/phone'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm';
 
@@ -8,15 +9,9 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   const syncData = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then((response) => setPersons(response.data));
-  }
-
-  const sendData = (person) => {
-    axios
-      .post('http://localhost:3001/persons', person)
-      .then(() => syncData());
+    phoneServices
+      .getAll()
+      .then((phoneBook) => setPersons(phoneBook))
   }
 
   useEffect(syncData, []);
@@ -43,12 +38,20 @@ const App = () => {
     e.preventDefault();
     const name = e.target.name.value;
     const number = e.target.number.value;
+    clearFields(e);
     if (nameConflict(name)) {
       alert(`${name} is already added to the phonebook`);
     } else {
       const newPerson = { id: persons.length + 1, name, number }
-      sendData(newPerson);
+      phoneServices
+        .create(newPerson)
+        .then(() => syncData());
     }
+  }
+
+  const clearFields = (e) => {
+    e.target.name.value = '';
+    e.target.number.value = '';
   }
 
   return (
