@@ -5,8 +5,19 @@ const app = express()
 // Middleware -> our functions for middleware need to be taken into use before routes if we want them to be executed before the route event handlers are called
 app.use(express.json()) // Allows us to parse requests with JSON data
 
-// tiny morgan
-app.use(morgan('tiny'));
+// morgan creating specific tokens
+// create a token for content-length
+morgan.token('res[content-length]', (req, res) => {
+  return res.headers['Content-Length']
+})
+
+// create a token for req-body, convert req.body from JSON to string
+morgan.token('req-body', (req, res) => {
+  return JSON.stringify(req.body)
+})
+
+// The format we are using with tokens
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
 
 let persons = [
   { 
