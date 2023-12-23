@@ -51,8 +51,12 @@ const App = () => {
         }
         phoneServices
           .updateNumber(updateId, updatePerson)
-          .then(() => syncData())
-          .catch((error) => {
+          .then(() => {
+            syncData();
+            setMessage({ content: `updated number of ${updatePerson.name} to ${updatePerson.number}`, error: false })
+            messageTimeout(2500)
+          })
+          .catch(() => {
             setMessage({ content: `Information of ${updatePerson.name} has already been removed from server`, error: true })
             messageTimeout(5000);
           })
@@ -73,7 +77,11 @@ const App = () => {
     e.preventDefault();
     phoneServices
       .deletePerson(id)
-      .then(() => syncData());
+      .then(() => {
+        syncData()
+        setMessage({ content: `deleted person from phonebook`, error: false })
+        messageTimeout(2500)
+      });
   }
 
   return (
