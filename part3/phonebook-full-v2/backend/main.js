@@ -69,14 +69,17 @@ app.get('/api/persons', (request, response) => {
 
 // Server endpoint to handle GET requests to '/api/persons/something'
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
+  const id = request.params.id
 
-  if (!person) {
-    response.status(404).end()
-  } else {
-    response.json(person);
-  }
+  Person.findById(id)
+  .then((person) => {
+    response.json(person)
+  })
+  .catch((error) => {
+    response.status(404).json({
+      error: 'person not found'
+    })
+  })
 })
 
 // Server endpoint to handle POST requests
