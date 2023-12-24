@@ -20,7 +20,7 @@ Full Stack Open is a comprehensive online course providing in-depth coverage of 
 
 ### Part 3: Programming a Server with NodeJS and Express
    - Building a server using Node.js and Express
-   - Deploying an app to the internet
+   - Deploying an app to the internet: [phonebook-full-v1](https://phonebook-full-v1.onrender.com/)
    - Saving data to MongoDB
    - Validation & ESLint
 
