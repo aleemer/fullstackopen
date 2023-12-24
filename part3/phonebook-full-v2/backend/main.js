@@ -39,7 +39,8 @@ app.get('/info', (request, response) => {
 // Server endpoint to handle GET requests to '/api/persons'
 app.get('/api/persons', (request, response) => {
   // Get data from database
-  Person.find({}).then((persons) => {
+  Person.find({})
+  .then((persons) => {
     response.json(persons)
   })
 })
@@ -70,7 +71,7 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  // name unique case -> this should replace the number
+  // TODO: name unique case -> this should replace the number
 
   // create person
   const person = new Person({
@@ -78,8 +79,14 @@ app.post('/api/persons', (request, response) => {
     number: body.number
   })
   // save to database
-  person.save().then((savedPerson) => {
+  person.save()
+  .then((savedPerson) => {
     response.json(savedPerson)
+  })
+  .catch((error) => {
+    response.status(500).json({
+      error: 'error saving person'
+    })
   })
 })
 
