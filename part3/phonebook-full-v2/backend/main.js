@@ -3,11 +3,12 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 
+// Import models
+const Person = require('./models/person')
+
 // Middleware -> our functions for middleware need to be taken into use before routes if we want them to be executed before the route event handlers are called
 // app.use(express.static('dist')) // Tells express to use static content from build
-
 app.use(express.json()) // Allows us to parse requests with JSON data
-
 app.use(cors()); // Permitting requests from all origins
 
 // morgan creating specific tokens
@@ -60,7 +61,10 @@ app.get('/info', (request, response) => {
 
 // Server endpoint to handle GET requests to '/api/persons'
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  // Get data from database
+  Person.find({}).then((persons) => {
+    response.json(persons)
+  })
 })
 
 // Server endpoint to handle GET requests to '/api/persons/something'
