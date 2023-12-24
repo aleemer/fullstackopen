@@ -99,6 +99,21 @@ app.post('/api/persons', (request, response) => {
   response.status(200).json(person)
 })
 
+// Server endpoint to handle PUT requests to '/api/persons/something'
+app.put('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const newPerson = request.body
+
+  if (!newPerson) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+
+  persons = persons.map(person => person.id === id ? newPerson : person)
+  response.status(200).json(newPerson)
+})
+
 // Server endpoint to handle DELETE requests to '/api/persons/something'
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
