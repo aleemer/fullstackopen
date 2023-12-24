@@ -12,7 +12,8 @@ backend/node_modules
 frontend/node_modules
 
 # Env variables 
-.env
+backend/.env
+frontend/.env
 
 # Build
 dist
