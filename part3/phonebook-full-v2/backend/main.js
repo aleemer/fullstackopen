@@ -25,29 +25,6 @@ morgan.token('req-body', (req, res) => {
 // The format we are using with tokens
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
 
-let persons = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
-
 // Server endpoint to handle info page
 app.get('/info', (request, response) => {
   const info = `
@@ -86,26 +63,24 @@ app.get('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
+  // handle case where name or number not in request
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'content missing'
     })
   }
 
-  if (persons.find(person => person.name === body.name)) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  }
+  // name unique case -> this should replace the number
 
-  const person = {
-    id: persons.length + 1,
+  // create person
+  const person = new Person({
     name: body.name,
     number: body.number
-  }
-
-  persons = persons.concat(person)
-  response.status(200).json(person)
+  })
+  // save to database
+  person.save().then((savedPerson) => {
+    response.json(savedPerson)
+  })
 })
 
 // Server endpoint to handle PUT requests to '/api/persons/something'
