@@ -27,13 +27,17 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :r
 
 // Server endpoint to handle info page
 app.get('/info', (request, response) => {
-  const info = `
+  Person.find({})
+  .then((result) => {
+    const info = `
     <div>
-      <p>Phonebook has info for ${persons.length} people</p>
+      <p>Phonebook has info for ${result.length} people</p>
       <p>${new Date()}</p>
     </div>
   `
-  response.send(info)
+    response.send(info)
+  })
+  .catch((error) => next(error))
 })
 
 // Server endpoint to handle GET requests to '/api/persons'
