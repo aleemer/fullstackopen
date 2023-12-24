@@ -72,6 +72,7 @@ app.post('/api/persons', (request, response) => {
   }
 
   // TODO: name unique case -> this should replace the number
+  // For now, handling this in PUT case
 
   // create person
   const person = new Person({
@@ -92,7 +93,7 @@ app.post('/api/persons', (request, response) => {
 
 // Server endpoint to handle PUT requests to '/api/persons/something'
 app.put('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
+  const id = request.params.id
   const newPerson = request.body
 
   if (!newPerson) {
@@ -101,8 +102,16 @@ app.put('/api/persons/:id', (request, response) => {
     })
   }
 
-  persons = persons.map(person => person.id === id ? newPerson : person)
-  response.status(200).json(newPerson)
+  Person.findByIdAndUpdate(id, newPerson, { new: true })
+    .then((newPerson) => {
+      console.log('added update', newPerson)
+      response.json(newPerson)
+    })
+    .catch((error) => {
+      response.status(500).json({
+        error: 'error updating person'
+      })
+    })
 })
 
 // Server endpoint to handle DELETE requests to '/api/persons/something'
