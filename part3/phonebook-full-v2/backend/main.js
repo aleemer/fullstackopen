@@ -116,10 +116,17 @@ app.put('/api/persons/:id', (request, response) => {
 
 // Server endpoint to handle DELETE requests to '/api/persons/something'
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
+  const id = request.params.id
 
-  response.status(204).end()
+  Person.findByIdAndDelete(id)
+    .then((result) => {
+      response.status(200).json(result)
+    })
+    .catch((error) => {
+      response.status(500).json({
+        error: 'error deleting person'
+      })
+    })
 })
 
 // Middleware to handle requests made to non-existent routes
