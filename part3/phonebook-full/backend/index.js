@@ -1,9 +1,12 @@
 const express = require('express')
-const morgan = require('morgan');
+const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
 // Middleware -> our functions for middleware need to be taken into use before routes if we want them to be executed before the route event handlers are called
 app.use(express.json()) // Allows us to parse requests with JSON data
+
+app.use(cors()); // Permitting requests from all origins
 
 // morgan creating specific tokens
 // create a token for content-length
