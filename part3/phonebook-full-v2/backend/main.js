@@ -37,31 +37,28 @@ app.get('/info', (request, response) => {
 })
 
 // Server endpoint to handle GET requests to '/api/persons'
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   // Get data from database
   Person.find({})
   .then((persons) => {
     response.json(persons)
   })
+  .catch((error) => next(error))
 })
 
 // Server endpoint to handle GET requests to '/api/persons/something'
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
 
   Person.findById(id)
   .then((person) => {
     response.json(person)
   })
-  .catch((error) => {
-    response.status(404).json({
-      error: 'person not found'
-    })
-  })
+  .catch((error) => next(error))
 })
 
 // Server endpoint to handle POST requests
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   // handle case where name or number not in request
@@ -84,15 +81,11 @@ app.post('/api/persons', (request, response) => {
   .then((savedPerson) => {
     response.json(savedPerson)
   })
-  .catch((error) => {
-    response.status(500).json({
-      error: 'error saving person'
-    })
-  })
+  .catch((error) => next(error))
 })
 
 // Server endpoint to handle PUT requests to '/api/persons/something'
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   const newPerson = request.body
 
@@ -107,35 +100,41 @@ app.put('/api/persons/:id', (request, response) => {
       console.log('added update', newPerson)
       response.json(newPerson)
     })
-    .catch((error) => {
-      response.status(500).json({
-        error: 'error updating person'
-      })
-    })
+    .catch((error) => next(error))
 })
 
 // Server endpoint to handle DELETE requests to '/api/persons/something'
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
 
   Person.findByIdAndDelete(id)
     .then((result) => {
       response.status(200).json(result)
     })
-    .catch((error) => {
-      response.status(500).json({
-        error: 'error deleting person'
-      })
-    })
+    .catch((error) => next(error))
 })
 
+// Execution order of middleware is the same as the order that they are loaded into express with app.use(...)
+
 // Middleware to handle requests made to non-existent routes
-// Necessary to put this after all routes -> this will run if nothing is caught previously!
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint '})
 }
 
+// handler of requests with unknown endpoint
 app.use(unknownEndpoint);
+
+// Middleware to handle error
+const errorHandler = (error, request, response, next) => {
+  const statusCode = error.statusCode || 500
+  const errorMessage = error.message || 'unknown error'
+  response.status(statusCode).json({ error: errorMessage })
+
+  next(); // Call next to ensure the request-response cycle continues
+}
+
+// handler of requests with result to errors
+app.use(errorHandler)
 
 // Server endpoint to handle GET requests to '/'
 const PORT = process.env.PORT || 3001
