@@ -1,68 +1,68 @@
-const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors')
+const express = require("express")
+const morgan = require("morgan")
+const cors = require("cors")
 const app = express()
 
 // Import models
-const Person = require('./models/person')
+const Person = require("./models/person")
 
 // Middleware -> our functions for middleware need to be taken into use before routes if we want them to be executed before the route event handlers are called
-app.use(express.static('dist')) // Tells express to use static content from build
+app.use(express.static("dist")) // Tells express to use static content from build
 app.use(express.json()) // Allows us to parse requests with JSON data
-app.use(cors()); // Permitting requests from all origins
+app.use(cors()) // Permitting requests from all origins
 
 // morgan creating specific tokens
 // create a token for content-length
-morgan.token('res[content-length]', (req, res) => {
-  return res.headers['Content-Length']
+morgan.token("res[content-length]", (req, res) => {
+  return res.headers["Content-Length"]
 })
 
 // create a token for req-body, convert req.body from JSON to string
-morgan.token('req-body', (req, res) => {
+morgan.token("req-body", (req, res) => {
   return JSON.stringify(req.body)
 })
 
 // The format we are using with tokens
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :req-body"))
 
 // Server endpoint to handle info page
-app.get('/info', (request, response) => {
+app.get("/info", (request, response) => {
   Person.find({})
-  .then((result) => {
-    const info = `
+    .then((result) => {
+      const info = `
     <div>
       <p>Phonebook has info for ${result.length} people</p>
       <p>${new Date()}</p>
     </div>
   `
-    response.send(info)
-  })
-  .catch((error) => next(error))
+      response.send(info)
+    })
+    .catch((error) => next(error))
 })
 
 // Server endpoint to handle GET requests to '/api/persons'
-app.get('/api/persons', (request, response, next) => {
+app.get("/api/persons", (request, response, next) => {
   // Get data from database
   Person.find({})
-  .then((persons) => {
-    response.json(persons)
-  })
-  .catch((error) => next(error))
+    .then((persons) => {
+      response.json(persons)
+    })
+    .catch((error) => next(error))
 })
 
 // Server endpoint to handle GET requests to '/api/persons/something'
-app.get('/api/persons/:id', (request, response, next) => {
+app.get("/api/persons/:id", (request, response, next) => {
   const id = request.params.id
 
   Person.findById(id)
-  .then((person) => {
-    response.json(person)
-  })
-  .catch((error) => next(error))
+    .then((person) => {
+      response.json(person)
+    })
+    .catch((error) => next(error))
 })
 
 // Server endpoint to handle POST requests
-app.post('/api/persons', (request, response, next) => {
+app.post("/api/persons", (request, response, next) => {
   const body = request.body
 
   // TODO: name unique case -> this should replace the number
@@ -75,33 +75,33 @@ app.post('/api/persons', (request, response, next) => {
   })
   // save to database
   person.save()
-  .then((savedPerson) => {
-    response.json(savedPerson)
-  })
-  .catch((error) => next(error))
+    .then((savedPerson) => {
+      response.json(savedPerson)
+    })
+    .catch((error) => next(error))
 })
 
 // Server endpoint to handle PUT requests to '/api/persons/something'
-app.put('/api/persons/:id', (request, response, next) => {
+app.put("/api/persons/:id", (request, response, next) => {
   const id = request.params.id
   const newPerson = request.body
 
   if (!newPerson) {
     return response.status(400).json({
-      error: 'content missing'
+      error: "content missing"
     })
   }
 
   Person.findByIdAndUpdate(id, newPerson, { new: true })
     .then((newPerson) => {
-      console.log('added update', newPerson)
+      console.log("added update", newPerson)
       response.json(newPerson)
     })
     .catch((error) => next(error))
 })
 
 // Server endpoint to handle DELETE requests to '/api/persons/something'
-app.delete('/api/persons/:id', (request, response, next) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   const id = request.params.id
 
   Person.findByIdAndDelete(id)
@@ -115,17 +115,17 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 // Middleware to handle requests made to non-existent routes
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint '})
+  response.status(404).send({ error: "unknown endpoint " })
 }
 
 // handler of requests with unknown endpoint
-app.use(unknownEndpoint);
+app.use(unknownEndpoint)
 
 // Middleware to handle error
 const errorHandler = (error, request, response, next) => {
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" })
+  } else if (error.name === "ValidationError") {
     return response.status(400).json({ error: error.message })
   }
   next()
