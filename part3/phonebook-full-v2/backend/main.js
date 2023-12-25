@@ -7,7 +7,7 @@ const app = express()
 const Person = require('./models/person')
 
 // Middleware -> our functions for middleware need to be taken into use before routes if we want them to be executed before the route event handlers are called
-// app.use(express.static('dist')) // Tells express to use static content from build
+app.use(express.static('dist')) // Tells express to use static content from build
 app.use(express.json()) // Allows us to parse requests with JSON data
 app.use(cors()); // Permitting requests from all origins
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/persons' // Upon deployment, backend and frontend at same base render URL
+const baseUrl = '/api/persons' // Upon deployment, backend and frontend at same base render URL
 
 const getAll = () => {
   const request = axios.get(baseUrl)
