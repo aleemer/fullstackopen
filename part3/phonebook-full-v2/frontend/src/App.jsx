@@ -69,7 +69,12 @@ const App = () => {
           syncData();
           setMessage({ content: `added ${newPerson.name}`, error: false })
           messageTimeout(2500);
-        });
+        })
+        .catch((error) => {
+          console.log('error is', error)
+          setMessage({ content: error.response.data.error, error: true })
+          messageTimeout(5000);
+        })
     }
   }
 

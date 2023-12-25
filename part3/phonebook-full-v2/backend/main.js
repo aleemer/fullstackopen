@@ -65,13 +65,6 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
-  // handle case where name or number not in request
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: 'content missing'
-    })
-  }
-
   // TODO: name unique case -> this should replace the number
   // For now, handling this in PUT case
 
@@ -130,11 +123,12 @@ app.use(unknownEndpoint);
 
 // Middleware to handle error
 const errorHandler = (error, request, response, next) => {
-  const statusCode = error.statusCode || 500
-  const errorMessage = error.message || 'unknown error'
-  response.status(statusCode).json({ error: errorMessage })
-
-  next(); // Call next to ensure the request-response cycle continues
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+  next()
 }
 
 // handler of requests with result to errors
