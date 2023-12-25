@@ -71,7 +71,6 @@ const App = () => {
           messageTimeout(2500);
         })
         .catch((error) => {
-          console.log('error is', error)
           setMessage({ content: error.response.data.error, error: true })
           messageTimeout(5000);
         })
