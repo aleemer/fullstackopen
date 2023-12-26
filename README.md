@@ -68,7 +68,7 @@ Full Stack Open is a comprehensive online course providing in-depth coverage of 
    - Building & configuring environments
    - Basics of orchestration
 
-### Part 13: Exercise App Deployment
+### Part 13: Using relational databases
    - Utilizing relational databases with Sequelize
    - Implementing join tables and queries
    - Managing database migrations for schema evolution
