@@ -4,21 +4,21 @@ Full Stack Open is a comprehensive online course providing in-depth coverage of 
 
 ## Key Components:
 
-### Part 0: Fundamentals of Web Apps
+### Part 0: Fundamentals of Web Apps (Completed)
    - Introduction to the basics of web development
    - Overview of the architecture of web applications
 
-### Part 1: Introduction to React
+### Part 1: Introduction to React (Completed)
    - Introduction to React library for building user interfaces
    - Component state, event handlers
    - More complex state & debugging React apps
 
-### Part 2: Communicating with Server
+### Part 2: Communicating with Server (Completed)
    - Rendering collections & forms
    - Getting data from server & altering data
    - Adding styles to React app
 
-### Part 3: Programming a Server with NodeJS and Express
+### Part 3: Programming a Server with NodeJS and Express (Completed)
    - Building a server using Node.js and Express
    - Deploying an app to the internet: [phonebook-full-v1](https://phonebook-full-v1.onrender.com/)
    - Saving data to MongoDB: [phonebook-full-v2](https://phonebook-full-v2.onrender.com)
