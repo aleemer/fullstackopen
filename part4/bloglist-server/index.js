@@ -10,13 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 // Blog schema
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
-const Blog = mongoose.model('Blog', blogSchema)
+const Blog = require('./models/blog')
 
 // MongoDB Connection
 const mongoUrl = process.env.MONGODB_URI
