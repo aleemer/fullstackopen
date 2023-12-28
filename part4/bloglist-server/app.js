@@ -1,4 +1,4 @@
-require("dotenv").config()
+const config = require('./utils/config')
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -8,10 +8,9 @@ const mongoose = require('mongoose')
 mongoose.set("strictQuery", false)
 
 // MongoDB Connection
-const mongoUrl = process.env.MONGODB_URI
-mongoose.connect(mongoUrl)
-  .then(() => console.log('successful connection to bloglist-server database',))
-  .catch((error) => console.log('error connecting...', error))
+mongoose.connect(config.MONGODB_URI)
+  .then(() => console.log('successful connection to MongoDB',))
+  .catch((error) => console.log('error connecting...', error.message))
 
 // App setup
 app.use(cors())
