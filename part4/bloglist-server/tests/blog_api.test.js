@@ -17,31 +17,31 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-test('blogs are returned as json', async () => {
+test('GET: blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
 
-test('there are two blogs', async () => {
+test('GET: there are two blogs', async () => {
   const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(2)
 })
 
 test('id exists in a blog', async () => {
-  const response = await api.get('/api/blogs')
-  const blogIDs = response.body.map(blog => blog.id)
+  const blogs = await helper.blogsInDb()
+  const blogIDs = blogs.map(blog => blog.id)
   expect(blogIDs).toHaveLength(2)
 })
 
 test('id is a unique identifier for a blog', async () => {
-  const response = await api.get('/api/blogs')
-  const blogIDs = response.body.map(blog => blog.id)
+  const blogs = await helper.blogsInDb()
+  const blogIDs = blogs.map(blog => blog.id)
   expect(listFn.uniqueArraySimple(blogIDs)).toBe(true)
 })
 
-test('a valid blog can be added', async () => {
+test('POST: a valid blog can be added', async () => {
   const newBlog = {
     title: 'My third blog',
     author: 'Jack Doe',
@@ -56,11 +56,11 @@ test('a valid blog can be added', async () => {
     .expect('Content-Type', /application\/json/)
 
   // verify the blog has been added
-  const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+  const blogs = await helper.blogsInDb()
+  expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
   
   // verify the blog added is the same as the newBlog locally
-  const blogAdded = response.body[2]
+  const blogAdded = blogs[2]
   delete blogAdded.id
   expect(listFn.sameObject(newBlog, blogAdded)).toBe(true)
 })
