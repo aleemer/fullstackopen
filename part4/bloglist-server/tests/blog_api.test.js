@@ -65,6 +65,22 @@ test('POST: a valid blog can be added', async () => {
   expect(listFn.sameObject(newBlog, blogAdded)).toBe(true)
 })
 
+test('POST: likes property missing defaults to 0', async () => {
+  const unpopularBlog = {
+    title: 'My fourth blog',
+    author: 'Isaiah Doe',
+    url: 'http://www.example.com/blog4'
+  }
+  // add the blog
+  await api.post('/api/blogs').send(unpopularBlog)
+  // verify the blog has been added
+  const blogs = await helper.blogsInDb()
+  expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
+  // verify the blog added has likes:0
+  const blogAdded = blogs[2]
+  expect(blogAdded.likes).toEqual(0)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
