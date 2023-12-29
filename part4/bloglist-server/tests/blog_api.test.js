@@ -67,9 +67,9 @@ test('POST: a valid blog can be added', async () => {
 
 test('POST: likes property missing defaults to 0', async () => {
   const unpopularBlog = {
-    title: 'My fourth blog',
-    author: 'Isaiah Doe',
-    url: 'http://www.example.com/blog4'
+    title: 'My third blog',
+    author: 'Jack Doe',
+    url: 'http://www.example.com/blog3',
   }
   // add the blog
   await api.post('/api/blogs').send(unpopularBlog)
@@ -79,6 +79,32 @@ test('POST: likes property missing defaults to 0', async () => {
   // verify the blog added has likes:0
   const blogAdded = blogs[2]
   expect(blogAdded.likes).toEqual(0)
+})
+
+test('POST: title property missing causes 400', async () => {
+  const noTitleBlog = {
+    author: 'Jack Doe',
+    url: 'http://www.example.com/blog3',
+    likes: 4
+  }
+  // add the blog, fail with 400
+  await api
+    .post('/api/blogs')
+    .send(noTitleBlog)
+    .expect(400)
+})
+
+test('POST: url property missing causes 400', async () => {
+  const noUrlBlog = {
+    title: 'My third blog',
+    author: 'Jack Doe',
+    likes: 4
+  }
+  // add the blog, fail with 400
+  await api
+    .post('/api/blogs')
+    .send(noUrlBlog)
+    .expect(400)
 })
 
 afterAll(async () => {

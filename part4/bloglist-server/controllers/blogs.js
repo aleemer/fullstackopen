@@ -12,12 +12,19 @@ blogsRouter.get('/', (request, response) => {
 
 // Handles POST requests
 blogsRouter.post('/', (request, response) => {
+  const body = request.body
+
+  if (!body || !body.title || !body.url) {
+    return response.status(400).send({ error: 'Content missing' })
+  }
+
   const blog = new Blog({
-    title: request.body.title,
-    author: request.body.author,
-    url: request.body.url,
-    likes: request.body.likes || 0
+    title: body.title,
+    author: body.author || 'unknown',
+    url: body.url,
+    likes: body.likes || 0
   })
+
   blog
     .save()
     .then(result => {
