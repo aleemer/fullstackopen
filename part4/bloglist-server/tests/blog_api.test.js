@@ -41,6 +41,30 @@ test('id is a unique identifier for a blog', async () => {
   expect(listFn.uniqueArraySimple(blogIDs)).toBe(true)
 })
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'My third blog',
+    author: 'Jack Doe',
+    url: 'http://www.example.com/blog3',
+    likes: 4
+  }
+  // add the blog
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  // verify the blog has been added
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+  
+  // verify the blog added is the same as the newBlog locally
+  const blogAdded = response.body[2]
+  delete blogAdded.id
+  expect(listFn.sameObject(newBlog, blogAdded)).toBe(true)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
