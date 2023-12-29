@@ -19,16 +19,29 @@ const indexOfMax = (array) => {
   return maxIndex
 }
 
-// Generates a map (obj) from an array of strings
-const generateMap = (array) => {
+// Generates a map of blogs in the form, author:count
+const generateBlogMap = (blogs) => {
   const map = {}
 
-  array.forEach((val) => {
+  blogs.forEach((val) => {
     if (map[val]) {
       map[val] = map[val] + 1
     } else {
       map[val] = 1
     }
+  })
+  return map
+}
+
+// Generate a map of blogs in the form, author:totalLikes
+const generateLikesMap = (blogs) => {
+  const map = {}
+
+  const authors = blogs.map(blog => blog.author)
+  authors.forEach((author) => {
+    const authorBlogs = blogs.map(blog => blog.author === author)
+    const authorLikes = totalLikes(authorBlogs)
+    map[author] = authorLikes
   })
   return map
 }
@@ -57,11 +70,19 @@ const favouriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  const blogMap = generateMap(blogs.map(blog => blog.author))
+  const blogMap = generateBlogMap(blogs.map(blog => blog.author))
   const authorArray = Object.keys(blogMap)
   const countArray = Object.values(blogMap)
   const maxIndex = indexOfMax(countArray)
   return maxIndex === -1 ? { author: '', blogs: 0 } : { author: authorArray[maxIndex], blogs: countArray[maxIndex] }
+}
+
+const mostLikes = (blogs) => {
+  const likesMap = generateLikesMap(blogs)
+  const authorArray = Object.keys(likesMap)
+  const likesArray = Object.values(likesMap)
+  const maxIndex = indexOfMax(likesArray)
+  return maxIndex === -1 ? { author: '', likes: 0 } : { author: authorArray[maxIndex], blogs: likesArray[maxIndex] }
 }
 
 module.exports = {
@@ -69,5 +90,6 @@ module.exports = {
   sameObject,
   totalLikes,
   favouriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }

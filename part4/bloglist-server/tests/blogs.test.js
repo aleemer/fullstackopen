@@ -115,3 +115,44 @@ describe('the most blogs', () => {
     })).toBe(true)
   })
 })
+
+describe('the most likes', () => {
+  const listWithZeroBlog = []
+  const listWithOneBlog = [
+    {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 5,
+      __v: 0
+    }
+  ]
+  const listWithManyBlogs = [
+    { title: 'Random Title 1', author: 'John Doe', url: 'https://example.com/1', likes: 5 },
+    { title: 'Random Title 2', author: 'Jane Smith', url: 'https://example.com/2', likes: 3 },
+    { title: 'Random Title 3', author: 'Bob Johnson', url: 'https://example.com/3', likes: 7 },
+    { title: 'Random Title 4', author: 'Jane Smith', url: 'https://example.com/3', likes: 2 }
+  ]
+
+  test('of empty list is empty', () => {
+    const result = listHelper.mostLikes(listWithZeroBlog)
+    expect(listHelper.sameObject(result, {
+      author: '', likes: 0
+    })).toBe(true)
+  })
+
+  test('of list with one blog is expected likes', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(listHelper.sameObject(result, {
+      author: 'Edsger W. Dijkstra', likes: 5
+    })).toBe(true)
+  })
+
+  test('of list with many blogs is sum of likes', () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs)
+    expect(listHelper.sameObject(result, {
+      author: 'Jane Smith', likes: 5
+    })).toBe(true)
+  })
+})
