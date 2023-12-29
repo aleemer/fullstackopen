@@ -29,6 +29,13 @@ test('GET: there are two blogs', async () => {
   expect(response.body).toHaveLength(2)
 })
 
+test('GET: the two blogs equal our initialBlogs', async () => {
+  const response = await api.get('/api/blogs')
+  const receivedBlogs = response.body.map((blog) => { return { title: blog.title, author: blog.author,
+      url: blog.url, likes: blog.likes }})
+  expect(listFn.sameArrayComplex(helper.initialBlogs, receivedBlogs)).toBe(true)
+})
+
 test('id exists in a blog', async () => {
   const blogs = await helper.blogsInDb()
   const blogIDs = blogs.map(blog => blog.id)

@@ -19,6 +19,38 @@ const uniqueArrayComplex = (array) => {
   return true
 }
 
+// Returns true if two arrays are equivalent (same values, same order), works for primitive values
+const sameArraySimple = (a, b) => {
+  // Must be the same size
+  if (a.length !== b.length) {
+    return false
+  }
+
+  const iterLength = a.length
+  for (let i = 0; i < iterLength; i++) {
+    if (a[i] !== b[i]) {
+      return false;
+    }
+  }
+  return true
+}
+
+// Returns true if two arrays are equivalent (same values, same order), works for objects
+const sameArrayComplex = (a, b) => {
+  // Must be the same size
+  if (a.length !== b.length) {
+    return false
+  }
+
+  const iterLength = a.length
+  for (let i = 0; i < iterLength; i++) {
+    if (!sameObject(a[i], b[i])) {
+      return false
+    }
+  }
+  return true
+}
+
 
 const indexOfMax = (array) => {
   if (array.length === 0) {
@@ -107,6 +139,8 @@ module.exports = {
   dummy,
   uniqueArraySimple,
   uniqueArrayComplex,
+  sameArraySimple,
+  sameArrayComplex,
   sameObject,
   totalLikes,
   favouriteBlog,
