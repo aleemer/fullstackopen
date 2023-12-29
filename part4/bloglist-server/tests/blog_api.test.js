@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const listFn = require('../utils/list_helper')
 const mongoose = require('mongoose')
-mongoose.set('bufferTimeoutMS', 30000)
+mongoose.set('bufferTimeoutMS', 5000)
 const app = require('../app')
 const api = supertest(app)
 
@@ -47,6 +47,13 @@ test('id is a unique identifier for a blog', async () => {
   const blogIDs = blogs.map(blog => blog.id)
   expect(listFn.uniqueArraySimple(blogIDs)).toBe(true)
 })
+
+// test('GET: viewing a specific blog', async () => {
+//   const id = 'test'
+
+//   const response = await api.get(`/api/blogs/${id}`)
+//   console.log('response is ', response.body)
+// })
 
 test('POST: a valid blog can be added', async () => {
   const newBlog = {
