@@ -2,6 +2,24 @@ const dummy = (blogs) => {
   return 1
 }
 
+// Returns true if the array is unique, works for primitive values
+const uniqueArraySimple = (array) => {
+  return (new Set(array)).size === array.length
+}
+
+// Returns true if the array is unique, works for objects
+const uniqueArrayComplex = (array) => {
+  for (let i = 0; i < array.length; i++) {
+    for (let j = i + 1; j < array.length; j++) {
+      if (sameObject(array[i], array[j])) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
+
 const indexOfMax = (array) => {
   if (array.length === 0) {
     return -1
@@ -87,6 +105,8 @@ const mostLikes = (blogs) => {
 
 module.exports = {
   dummy,
+  uniqueArraySimple,
+  uniqueArrayComplex,
   sameObject,
   totalLikes,
   favouriteBlog,

@@ -1,5 +1,6 @@
 const supertest = require('supertest')
 const helper = require('./test_helper')
+const listFn = require('../utils/list_helper')
 const mongoose = require('mongoose')
 mongoose.set('bufferTimeoutMS', 30000)
 const app = require('../app')
@@ -26,6 +27,12 @@ test('blogs are returned as json', async () => {
 test('there are two blogs', async () => {
   const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(2)
+})
+
+test('id exists in a blog', async () => {
+  const response = await api.get('/api/blogs')
+  const blogIDs = response.body.map(blog => blog.id)
+  expect(blogIDs).toHaveLength(2)
 })
 
 afterAll(async () => {
