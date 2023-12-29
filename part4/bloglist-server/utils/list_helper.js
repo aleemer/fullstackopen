@@ -9,7 +9,7 @@ const indexOfMax = (array) => {
 
   let max = array[0]
   let maxIndex = 0
-  
+
   for (let i = 0; i < array.length; i++) {
     if (array[i] >= max) {
       maxIndex = i
@@ -19,8 +19,22 @@ const indexOfMax = (array) => {
   return maxIndex
 }
 
-const sameBlog = (a, b) => {
-  // Blog equality determined on all fields being the same
+// Generates a map (obj) from an array of strings
+const generateMap = (array) => {
+  const map = {}
+
+  array.forEach((val) => {
+    if (map[val]) {
+      map[val] = map[val] + 1
+    } else {
+      map[val] = 1
+    }
+  })
+  return map
+}
+
+const sameObject= (a, b) => {
+  // Object equality determined on all fields being the same
   const fields = Object.keys(a)
   fields.forEach((field) => {
     if (a[field] !== b[field]) {
@@ -42,9 +56,18 @@ const favouriteBlog = (blogs) => {
   return indexMaxLikes === -1 ? {} : blogs[indexMaxLikes]
 }
 
+const mostBlogs = (blogs) => {
+  const blogMap = generateMap(blogs.map(blog => blog.author))
+  const authorArray = Object.keys(blogMap)
+  const countArray = Object.values(blogMap)
+  const maxIndex = indexOfMax(countArray)
+  return maxIndex === -1 ? { author: '', blogs: 0 } : { author: authorArray[maxIndex], blogs: countArray[maxIndex] }
+}
+
 module.exports = {
   dummy,
-  sameBlog,
+  sameObject,
   totalLikes,
-  favouriteBlog
+  favouriteBlog,
+  mostBlogs
 }
