@@ -35,6 +35,12 @@ test('id exists in a blog', async () => {
   expect(blogIDs).toHaveLength(2)
 })
 
+test('id is a unique identifier for a blog', async () => {
+  const response = await api.get('/api/blogs')
+  const blogIDs = response.body.map(blog => blog.id)
+  expect(listFn.uniqueArraySimple(blogIDs)).toBe(true)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
