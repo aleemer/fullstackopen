@@ -61,17 +61,17 @@ describe('a favourite blog', () => {
 
   test('of empty list is empty', () => {
     const result = listHelper.favouriteBlog(listWithZeroBlog)
-    expect(listHelper.sameObject(result, {})).toBe(true)
+    expect(result).toEqual({})
   })
 
   test('of list with one blog is that blog', () => {
     const result = listHelper.favouriteBlog(listWithOneBlog)
-    expect(listHelper.sameObject(listWithOneBlog[0], result)).toBe(true)
+    expect(result).toEqual(listWithOneBlog[0])
   })
 
   test('of list with many blogs', () => {
     const result = listHelper.favouriteBlog(listWithManyBlogs)
-    expect(listHelper.sameObject(listWithManyBlogs[2], result)).toBe(true)
+    expect(result).toEqual(listWithManyBlogs[2])
   })
 })
 
@@ -96,23 +96,17 @@ describe('the most blogs', () => {
 
   test('of empty list is empty', () => {
     const result = listHelper.mostBlogs(listWithZeroBlog)
-    expect(listHelper.sameObject(result, {
-      author: '', blogs: 0
-    })).toBe(true)
+    expect(result).toEqual({ author: '', blogs: 0 })
   })
 
   test('of list with one blog is that blog', () => {
     const result = listHelper.mostBlogs(listWithOneBlog)
-    expect(listHelper.sameObject(result, {
-      author: 'Edsger W. Dijkstra', blogs: 1
-    })).toBe(true)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 1 })
   })
 
   test('of list with many blogs', () => {
     const result = listHelper.mostBlogs(listWithManyBlogs)
-    expect(listHelper.sameObject(result, {
-      author: 'Jane Smith', blogs: 2
-    })).toBe(true)
+    expect(result).toEqual({ author: 'Jane Smith', blogs: 2 })
   })
 })
 
@@ -137,22 +131,16 @@ describe('the most likes', () => {
 
   test('of empty list is empty', () => {
     const result = listHelper.mostLikes(listWithZeroBlog)
-    expect(listHelper.sameObject(result, {
-      author: '', likes: 0
-    })).toBe(true)
+    expect(result).toEqual({ author: '', likes: 0 })
   })
 
   test('of list with one blog is expected likes', () => {
     const result = listHelper.mostLikes(listWithOneBlog)
-    expect(listHelper.sameObject(result, {
-      author: 'Edsger W. Dijkstra', likes: 5
-    })).toBe(true)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 5 })
   })
 
   test('of list with many blogs is sum of likes', () => {
-    const result = listHelper.mostBlogs(listWithManyBlogs)
-    expect(listHelper.sameObject(result, {
-      author: 'Jane Smith', likes: 5
-    })).toBe(true)
+    const result = listHelper.mostLikes(listWithManyBlogs)
+    expect(result).toEqual({ author: 'Bob Johnson', likes: 7 })
   })
 })

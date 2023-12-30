@@ -88,11 +88,11 @@ const generateLikesMap = (blogs) => {
   const map = {}
 
   const authors = blogs.map(blog => blog.author)
-  authors.forEach((author) => {
-    const authorBlogs = blogs.map(blog => blog.author === author)
+  for (const author of authors) {
+    const authorBlogs = blogs.filter(blog => blog.author === author)
     const authorLikes = totalLikes(authorBlogs)
     map[author] = authorLikes
-  })
+  }
   return map
 }
 
@@ -138,7 +138,7 @@ const mostLikes = (blogs) => {
   const authorArray = Object.keys(likesMap)
   const likesArray = Object.values(likesMap)
   const maxIndex = indexOfMax(likesArray)
-  return maxIndex === -1 ? { author: '', likes: 0 } : { author: authorArray[maxIndex], blogs: likesArray[maxIndex] }
+  return maxIndex === -1 ? { author: '', likes: 0 } : { author: authorArray[maxIndex], likes: likesArray[maxIndex] }
 }
 
 module.exports = {

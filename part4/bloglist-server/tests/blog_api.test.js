@@ -1,6 +1,6 @@
 const supertest = require('supertest')
 const helper = require('./test_helper')
-const listFn = require('../utils/list_helper')
+const listHelper = require('../utils/list_helper')
 const mongoose = require('mongoose')
 mongoose.set('bufferTimeoutMS', 5000)
 const app = require('../app')
@@ -50,7 +50,7 @@ test('id exists in a blog', async () => {
 test('id is a unique identifier for a blog', async () => {
   const blogs = await helper.blogsInDb()
   const blogIDs = blogs.map(blog => blog.id)
-  expect(listFn.uniqueArraySimple(blogIDs)).toBe(true)
+  expect(listHelper.uniqueArraySimple(blogIDs)).toBe(true)
 })
 
 test('GET: viewing a specific blog', async () => {
