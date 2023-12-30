@@ -64,10 +64,22 @@ describe('POST', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    // verify the blog has been added
+    // verify the user has been added
     const users = await helper.usersInDb()
     expect(users).toHaveLength(2)
 
+    // verify the user added is the same as local user
+    const userAdded = users[1]
+    expect(newUser.username).toEqual(userAdded.username)
+    expect(newUser.name).toEqual(userAdded.name)
+  })
+
+  // TODO
+  test('username property missing causes 400', async () => {
+  })
+
+  // TODO
+  test('password property missing causes 400', async () => {
   })
 })
 
