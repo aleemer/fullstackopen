@@ -10,15 +10,13 @@ const User = require('../models/user')
 
 beforeEach(async () => {
   await User.deleteMany({}) // delete all users in our test database
-  // save our user
-  const passwordHash = await bcrypt.hash(helper.initialUser.password, 10)
-  const user = new User({ 
-    username: helper.initialUser.username,
-    name: helper.initialUser.name,
-    passwordHash: passwordHash
-   })
-
-   await user.save()
+  // save all users as promises, and resolve in parallel
+  const promiseArray = helper.initialUsers.map(async user => {
+    const passwordHash = await bcrypt.hash(user.password, 10)
+    user = new User({ ...user, password: passwordHash })
+    return user.save()
+  })
+  await Promise.all(promiseArray)
 })
 
 describe('GET', () => {
@@ -48,6 +46,28 @@ describe('GET', () => {
     // Verify that the user we get is the desired one 
     const userReceived = response.body
     expect(userToGet).toEqual(userReceived)
+  })
+})
+
+describe('POST', () => {
+  test('a valid user can be added', async () => {
+    const newUser = {
+      username: 'mluukkai',
+      name: 'Matti Luukkainen',
+      password: 'salainen'
+    }
+
+    // add the user
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    // verify the blog has been added
+    const users = await helper.usersInDb()
+    expect(users).toHaveLength(2)
+
   })
 })
 
