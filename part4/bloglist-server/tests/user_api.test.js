@@ -74,12 +74,28 @@ describe('POST', () => {
     expect(newUser.name).toEqual(userAdded.name)
   })
 
-  // TODO
   test('username property missing causes 400', async () => {
+    const noUsernameUser = {
+      name: 'Matti Luukkainen',
+      password: 'salainen'
+    }
+    // add the user, fail with 400
+    await api
+      .post('/api/users')
+      .send(noUsernameUser)
+      .expect(400)
   })
 
-  // TODO
   test('password property missing causes 400', async () => {
+    const noPasswordUser = {
+      username: 'mluukkai',
+      name: 'Matti Luukkainen',
+    }
+    // add the user, fail with 400
+    await api
+      .post('/api/users')
+      .send(noPasswordUser)
+      .expect(400)
   })
 })
 
