@@ -1,5 +1,6 @@
 const supertest = require('supertest')
 const helper = require('./test_helper')
+const bcrypt = require('bcryptjs')
 const listHelper = require('../utils/list_helper')
 const mongoose = require('mongoose')
 mongoose.set('bufferTimeoutMS', 5000)
@@ -22,9 +23,11 @@ beforeEach(async () => {
   // Setup blog database
   await Blog.deleteMany({}) // delete all blogs in our test database
   // save all blogs as promises, and resolve in parallel
-  const blogObjects = helper.initialBlogs
-    .map(blog => new Blog(blog))
-  const blogPromiseArray = blogObjects.map(blog => blog.save())
+  const userId = await helper.getUserId()
+  const blogPromiseArray = helper.initialBlogs.map(async blog => {
+    const newBlog = new Blog({ ...blog, user: userId })
+    return newBlog.save()
+  })
   await Promise.all(blogPromiseArray)
 })
 
