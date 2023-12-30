@@ -8,7 +8,7 @@ blogsRouter.get('/', (request, response, next) => {
     .then(blogs => {
       response.json(blogs)
     })
-    .catch((error) => next(error))
+    .catch(error => next(error))
 })
 
 // Handles GET:id requests
@@ -20,7 +20,7 @@ blogsRouter.get('/:id', (request, response, next) => {
     .then(blog => {
       return response.json(blog)
     })
-    .catch((error) => next(error))
+    .catch(error => next(error))
 })
 
 // Handles POST requests
@@ -43,7 +43,24 @@ blogsRouter.post('/', (request, response, next) => {
     .then(result => {
       response.status(201).json(result)
     })
-    .catch((error) => next(error))
+    .catch(error => next(error))
+})
+
+// Handles PUT:id requests
+blogsRouter.put('/:id', (request, response, next) => {
+  const id = request.params.id
+
+  Blog
+    .findById(id)
+    .then((blog) => {
+      Blog
+        .findByIdAndUpdate(id, { likes: blog.likes + 1 }, { new: true })
+        .then(updatedBlog => {
+          return response.json(updatedBlog)
+        })
+        .catch(error => next(error))
+    })
+    .catch(error => next(error))
 })
 
 // Handles DELETE:id requests
@@ -55,7 +72,7 @@ blogsRouter.delete('/:id', (request, response, next) => {
     .then(blog => {
       return response.status(204).send()
     })
-    .catch((error) => next(error))
+    .catch(error => next(error))
 })
 
 module.exports = blogsRouter

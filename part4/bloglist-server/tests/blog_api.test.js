@@ -29,11 +29,16 @@ test('GET: there are two blogs', async () => {
   expect(response.body).toHaveLength(2)
 })
 
+// TODO: Fix this test
 test('GET: the two blogs equal our initialBlogs', async () => {
   const response = await api.get('/api/blogs')
   const receivedBlogs = response.body.map((blog) => { return { title: blog.title, author: blog.author,
       url: blog.url, likes: blog.likes }})
-  expect(listFn.sameArrayComplex(helper.initialBlogs, receivedBlogs)).toBe(true)
+
+  // sort to compare -> TODO: why was this giving me an error?
+  const sortedReceived = receivedBlogs.sort((a, b) => b.likes - a.likes)
+  const sortedInitial = helper.initialBlogs.sort((a, b) => b.likes - a.likes)
+  expect(sortedReceived).toEqual(sortedInitial)
 })
 
 test('id exists in a blog', async () => {
@@ -61,7 +66,7 @@ test('GET: viewing a specific blog', async () => {
 
   // Verify that the blog we get is the desired one
   const blogReceived = response.body
-  expect(listFn.sameObject(blogToGet, blogReceived)).toBe(true)
+  expect(blogToGet).toEqual(blogReceived)
 })
 
 test('GET: fails if id is invalid', async () => {
@@ -73,7 +78,7 @@ test('GET: fails if id is invalid', async () => {
   .expect(400)
 
   // Verify that the error is the correct type
-  expect(listFn.sameObject(response.body, { error: 'malformatted id'})).toBe(true)
+  expect(response.body).toEqual({ error: 'malformatted id' })
 })
 
 test('POST: a valid blog can be added', async () => {
@@ -97,7 +102,7 @@ test('POST: a valid blog can be added', async () => {
   // verify the blog added is the same as the newBlog locally
   const blogAdded = blogs[2]
   delete blogAdded.id
-  expect(listFn.sameObject(newBlog, blogAdded)).toBe(true)
+  expect(newBlog).toEqual(blogAdded)
 })
 
 test('POST: likes property missing defaults to 0', async () => {
@@ -142,6 +147,21 @@ test('POST: url property missing causes 400', async () => {
     .expect(400)
 })
 
+test('PUT: updating likes succeeds', async () => {
+  const blogs = await helper.blogsInDb()
+  const blogToLike = blogs[0]
+  const validId = blogToLike.id
+
+  // Verify that we perform a successful update
+  const response = await api
+    .put(`/api/blogs/${validId}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  // Verify that likes changes
+  const updatedBlog = response.body
+})
+
 test('DELETE: succeeds with 204 if id is valid', async () => {
   const oldBlogs = await helper.blogsInDb()
   const blogToDelete = oldBlogs[0]
@@ -155,7 +175,7 @@ test('DELETE: succeeds with 204 if id is valid', async () => {
   // Verify that the blog we delete is the desired one
   const newBlogs = await helper.blogsInDb()
   expect(newBlogs).toHaveLength(oldBlogs.length - 1)
-  expect(listFn.sameObject(blogToDelete, newBlogs[0])).toBe(false)
+  expect(blogToDelete).not.toEqual(newBlogs[0])
 })
 
 test('DELETE: fails if id is invalid', async () => {
@@ -167,7 +187,7 @@ test('DELETE: fails if id is invalid', async () => {
   .expect(400)
 
   // Verify that the error is the correct type
-  expect(listFn.sameObject(response.body, { error: 'malformatted id'})).toBe(true)
+  expect(response.body).toEqual({ error: 'malformatted id' })
 })
 
 afterAll(async () => {

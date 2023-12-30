@@ -98,8 +98,14 @@ const generateLikesMap = (blogs) => {
 
 const sameObject = (a, b) => {
   // Object equality determined on all fields being the same
-  const fields = Object.keys(a)
-  for (const field of fields) {
+  const fieldsA = Object.keys(a)
+  const fieldsB = Object.keys(b)
+  
+  if (fieldsA.length !== fieldsB.length) {
+    return false
+  }
+
+  for (const field of fieldsA) {
     if (a[field] !== b[field]) {
       return false
     }
