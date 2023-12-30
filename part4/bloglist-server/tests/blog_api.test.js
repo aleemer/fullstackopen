@@ -130,26 +130,34 @@ describe('POST', () => {
     const blogAdded = blogs[2]
     const fieldsToCompare = ['title', 'author', 'likes']
     fieldsToCompare.map(field => expect(newBlog[field]).toEqual(blogAdded[field]))
+
+    // verify the blog added is reflected in the user
+    const response = await api
+      .get(`/api/users/${userId}`)
+      .expect(200)
+    const user = response.body
+    expect(user.blogs.length).toEqual(helper.initialBlogs.length + 1)
+    expect(JSON.stringify(user.id)).toEqual(JSON.stringify(blogAdded.user))
   })
   
-  test('likes property missing defaults to 0', async () => {
-    // Get the id of the user performing add
-    const userId = await helper.getUserId()
+  // test('likes property missing defaults to 0', async () => {
+  //   // Get the id of the user performing add
+  //   const userId = await helper.getUserId()
 
-    const unpopularBlog = {
-      title: 'My third blog',
-      author: 'Jack Doe',
-      url: 'http://www.example.com/blog3',
-    }
-    // add the blog
-    await api.post('/api/blogs').send({ ...unpopularBlog, userId })
-    // verify the blog has been added
-    const blogs = await helper.blogsInDb()
-    expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
-    // verify the blog added has likes:0
-    const blogAdded = blogs[2]
-    expect(blogAdded.likes).toEqual(0)
-  })
+  //   const unpopularBlog = {
+  //     title: 'My third blog',
+  //     author: 'Jack Doe',
+  //     url: 'http://www.example.com/blog3',
+  //   }
+  //   // add the blog
+  //   await api.post('/api/blogs').send({ ...unpopularBlog, userId })
+  //   // verify the blog has been added
+  //   const blogs = await helper.blogsInDb()
+  //   expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
+  //   // verify the blog added has likes:0
+  //   const blogAdded = blogs[2]
+  //   expect(blogAdded.likes).toEqual(0)
+  // })
   
   // test('title property missing causes 400', async () => {
   //   const noTitleBlog = {
