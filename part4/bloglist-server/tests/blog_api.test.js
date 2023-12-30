@@ -122,14 +122,14 @@ describe('POST', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
   
-    // // verify the blog has been added
-    // const blogs = await helper.blogsInDb()
-    // expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
+    // verify the blog has been added
+    const blogs = await helper.blogsInDb()
+    expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
     
-    // // verify the blog added is the same as the newBlog locally
-    // const blogAdded = blogs[2]
-    // const fieldsToCompare = ['title', 'author', 'likes', 'id']
-    // fieldsToCompare.map(field => expect(newBlog[field]).toEqual(blogAdded[field]))
+    // verify the blog added is the same as the newBlog locally
+    const blogAdded = blogs[2]
+    const fieldsToCompare = ['title', 'author', 'likes', 'id']
+    fieldsToCompare.map(field => expect(newBlog[field]).toEqual(blogAdded[field]))
   })
   
   // test('likes property missing defaults to 0', async () => {
