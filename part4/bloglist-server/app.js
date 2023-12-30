@@ -4,11 +4,13 @@ require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require("./controllers/blogs")
+const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 const morgan = require('morgan')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
-const usersRouter = require('./controllers/users')
+
 
 mongoose.set("strictQuery", false)
 
@@ -24,7 +26,8 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use('/api/blogs', blogsRouter)    // Add Blog router for endpoints to that resource
-app.use('/api/users', usersRouter)    // Ass User router for endpoints to that resource
+app.use('/api/users', usersRouter)    // Add User router for endpoints to that resource
+app.use('/api/login', loginRouter)    // Add Login router for endpoints to that resoruce
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
