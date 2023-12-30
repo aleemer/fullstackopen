@@ -2,6 +2,12 @@ const bcrypt = require('bcryptjs')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
+// Handles GET requests -> likely to not be used
+usersRouter.get('/', async (request, response) => {
+  const user = await User.find({})
+  return response.json(user)
+})
+
 // Handles GET:id requests
 usersRouter.get('/:id', async (request, response) => {
   const id = request.params.id

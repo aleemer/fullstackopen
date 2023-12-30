@@ -17,7 +17,7 @@ const initialBlogs = [
 ]
 
 const initialUser = {
-  uername: 'aleemer',
+  username: 'aleemer',
   name: 'Aleem Tariq',
   password: 'wishfuldjinn'
 }
