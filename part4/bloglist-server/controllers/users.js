@@ -4,7 +4,7 @@ const User = require('../models/user')
 
 // Handles GET requests -> likely to not be used
 usersRouter.get('/', async (request, response) => {
-  const user = await User.find({})
+  const user = await User.find({}).populate('blogs')
   return response.json(user)
 })
 
@@ -12,7 +12,7 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.get('/:id', async (request, response) => {
   const id = request.params.id
 
-  const user = await User.findById(id)
+  const user = await User.findById(id).populate('blogs')
   return response.json(user)
 })
 

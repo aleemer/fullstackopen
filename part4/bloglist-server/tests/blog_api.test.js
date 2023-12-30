@@ -21,10 +21,12 @@ beforeEach(async () => {
   })
   await Promise.all(userPromiseArray)
 
+  // Get user id of the first user in our database (and only)
+  const userId = await helper.getUserId()
+
   // Setup blog database
   await Blog.deleteMany({}) // delete all blogs in our test database
   // save all blogs as promises, and resolve in parallel
-  const userId = await helper.getUserId()
   const blogPromiseArray = helper.initialBlogs.map(async blog => {
     // save blog(s)
     const newBlog = new Blog({ ...blog, user: userId })
@@ -48,31 +50,32 @@ describe('GET', () => {
     expect(response.body).toHaveLength(2)
   })
   
-  // test('the two blogs equal our initialBlogs', async () => {
-  //   const response = await api.get('/api/blogs')
-  //   const receivedBlogs = response.body.map((blog) => { return { title: blog.title, author: blog.author,
-  //       url: blog.url, likes: blog.likes }})
+  test('the two blogs equal our initialBlogs', async () => {
+    const response = await api.get('/api/blogs')
+    const receivedBlogs = response.body.map((blog) => { return { title: blog.title, author: blog.author,
+        url: blog.url, likes: blog.likes }})
   
-  //   const sortedReceived = receivedBlogs.sort((a, b) => b.likes - a.likes)
-  //   const sortedInitial = helper.initialBlogs.sort((a, b) => b.likes - a.likes)
-  //   expect(sortedReceived).toEqual(sortedInitial)
-  // })
+    const sortedReceived = receivedBlogs.sort((a, b) => b.likes - a.likes)
+    const sortedInitial = helper.initialBlogs.sort((a, b) => b.likes - a.likes)
+    expect(sortedReceived).toEqual(sortedInitial)
+  })
 
-  // test('viewing a specific blog', async () => {
-  //   const blogs = await helper.blogsInDb()
-  //   const blogToGet = blogs[0]
-  //   const validId = blogToGet.id
+  test('viewing a specific blog', async () => {
+    const blogs = await helper.blogsInDb()
+    const blogToGet = blogs[0]
+    const validId = blogToGet.id
   
-  //   // Verify that we do get a blog
-  //   const response = await api
-  //     .get(`/api/blogs/${validId}`)
-  //     .expect(200)
-  //     .expect('Content-Type', /application\/json/)
+    // Verify that we do get a blog
+    const response = await api
+      .get(`/api/blogs/${validId}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
   
-  //   // Verify that the blog we get is the desired one
-  //   const blogReceived = response.body
-  //   expect(blogToGet).toEqual(blogReceived)
-  // })
+    // Verify that the blog we get is the desired one (only compare title, author, likes, id)
+    const blogReceived = response.body
+    const fieldsToCompare = ['title', 'author', 'likes', 'id']
+    fieldsToCompare.map(field => expect(blogToGet[field]).toEqual(blogReceived[field]))
+  })
   
   test('fails if id is invalid', async () => {
     const id = 'test'
