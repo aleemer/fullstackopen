@@ -14,6 +14,7 @@ beforeEach(async () => {
   // Setup user database
   await User.deleteMany({})
   const userPromiseArray = helper.initialUsers.map(async user => {
+    // save user(s)
     const passwordHash = await bcrypt.hash(user.password, 10)
     user = new User({ ...user, password: passwordHash })
     return user.save()
@@ -25,8 +26,11 @@ beforeEach(async () => {
   // save all blogs as promises, and resolve in parallel
   const userId = await helper.getUserId()
   const blogPromiseArray = helper.initialBlogs.map(async blog => {
+    // save blog(s)
     const newBlog = new Blog({ ...blog, user: userId })
-    return newBlog.save()
+    await newBlog.save()
+    // update user
+    await User.findByIdAndUpdate(userId, { $push: { blogs: newBlog._id }})
   })
   await Promise.all(blogPromiseArray)
 })
