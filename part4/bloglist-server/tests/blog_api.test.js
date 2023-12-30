@@ -140,100 +140,98 @@ describe('POST', () => {
     expect(JSON.stringify(user.id)).toEqual(JSON.stringify(blogAdded.user))
   })
   
-  // test('likes property missing defaults to 0', async () => {
-  //   // Get the id of the user performing add
-  //   const userId = await helper.getUserId()
+  test('likes property missing defaults to 0', async () => {
+    // Get the id of the user performing add
+    const userId = await helper.getUserId()
 
-  //   const unpopularBlog = {
-  //     title: 'My third blog',
-  //     author: 'Jack Doe',
-  //     url: 'http://www.example.com/blog3',
-  //   }
-  //   // add the blog
-  //   await api.post('/api/blogs').send({ ...unpopularBlog, userId })
-  //   // verify the blog has been added
-  //   const blogs = await helper.blogsInDb()
-  //   expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
-  //   // verify the blog added has likes:0
-  //   const blogAdded = blogs[2]
-  //   expect(blogAdded.likes).toEqual(0)
-  // })
+    const unpopularBlog = {
+      title: 'My third blog',
+      author: 'Jack Doe',
+      url: 'http://www.example.com/blog3',
+    }
+    // add the blog
+    await api.post('/api/blogs').send({ ...unpopularBlog, userId })
+    // verify the blog has been added
+    const blogs = await helper.blogsInDb()
+    expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
+    // verify the blog added has likes:0
+    const blogAdded = blogs[2]
+    expect(blogAdded.likes).toEqual(0)
+  })
   
-  // test('title property missing causes 400', async () => {
-  //   const noTitleBlog = {
-  //     author: 'Jack Doe',
-  //     url: 'http://www.example.com/blog3',
-  //     likes: 4
-  //   }
-  //   // add the blog, fail with 400
-  //   await api
-  //     .post('/api/blogs')
-  //     .send(noTitleBlog)
-  //     .expect(400)
-  // })
+  test('title property missing causes 400', async () => {
+    const noTitleBlog = {
+      author: 'Jack Doe',
+      url: 'http://www.example.com/blog3',
+      likes: 4
+    }
+    // add the blog, fail with 400
+    await api
+      .post('/api/blogs')
+      .send(noTitleBlog)
+      .expect(400)
+  })
   
-  // test('url property missing causes 400', async () => {
-  //   const noUrlBlog = {
-  //     title: 'My third blog',
-  //     author: 'Jack Doe',
-  //     likes: 4
-  //   }
-  //   // add the blog, fail with 400
-  //   await api
-  //     .post('/api/blogs')
-  //     .send(noUrlBlog)
-  //     .expect(400)
-  // })
+  test('url property missing causes 400', async () => {
+    const noUrlBlog = {
+      title: 'My third blog',
+      author: 'Jack Doe',
+      likes: 4
+    }
+    // add the blog, fail with 400
+    await api
+      .post('/api/blogs')
+      .send(noUrlBlog)
+      .expect(400)
+  })
 })
 
 describe('PUT', () => {
-  // test('updating likes succeeds', async () => {
-  //   const blogs = await helper.blogsInDb()
-  //   const blogToLike = blogs[0]
-  //   const validId = blogToLike.id
+  test('updating likes succeeds', async () => {
+    const blogs = await helper.blogsInDb()
+    const blogToLike = blogs[0]
+    const validId = blogToLike.id
   
-  //   // Verify that we perform a successful update
-  //   const response = await api
-  //     .put(`/api/blogs/${validId}`)
-  //     .expect(200)
-  //     .expect('Content-Type', /application\/json/)
+    // Verify that we perform a successful update
+    const response = await api
+      .put(`/api/blogs/${validId}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
   
-  //   // Verify that only likes changes
-  //   const updatedBlog = response.body
-  //   expect(updatedBlog.likes).toEqual(blogToLike.likes + 1)
-  //   expect(updatedBlog).toEqual({ ...blogToLike, likes: blogToLike.likes + 1 })
-  // })
+    // Verify that only likes changes
+    const updatedBlog = response.body
+    expect(updatedBlog.likes).toEqual(blogToLike.likes + 1)
+  })
 })
 
-// describe('DELETE', () => {
-//   test('succeeds with 204 if id is valid', async () => {
-//     const oldBlogs = await helper.blogsInDb()
-//     const blogToDelete = oldBlogs[0]
-//     const validId = blogToDelete.id
+describe('DELETE', () => {
+  test('succeeds with 204 if id is valid', async () => {
+    const oldBlogs = await helper.blogsInDb()
+    const blogToDelete = oldBlogs[0]
+    const validId = blogToDelete.id
   
-//      // Verify that we perform a successful deletion
-//      await api
-//      .delete(`/api/blogs/${validId}`)
-//      .expect(204)
+     // Verify that we perform a successful deletion
+     await api
+     .delete(`/api/blogs/${validId}`)
+     .expect(204)
   
-//     // Verify that the blog we delete is the desired one
-//     const newBlogs = await helper.blogsInDb()
-//     expect(newBlogs).toHaveLength(oldBlogs.length - 1)
-//     expect(blogToDelete).not.toEqual(newBlogs[0])
-//   })
+    // Verify that the blog we delete is the desired one
+    const newBlogs = await helper.blogsInDb()
+    expect(newBlogs).toHaveLength(oldBlogs.length - 1)
+  })
   
-//   test('fails if id is invalid', async () => {
-//     const id = 'test'
+  test('fails if id is invalid', async () => {
+    const id = 'test'
   
-//     // Verify that we get an error
-//     const response = await api
-//     .delete(`/api/blogs/${id}`)
-//     .expect(400)
+    // Verify that we get an error
+    const response = await api
+    .delete(`/api/blogs/${id}`)
+    .expect(400)
   
-//     // Verify that the error is the correct type
-//     expect(response.body).toEqual({ error: 'malformatted id' })
-//   })
-// })
+    // Verify that the error is the correct type
+    expect(response.body).toEqual({ error: 'malformatted id' })
+  })
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
