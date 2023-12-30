@@ -14,8 +14,9 @@ blogsRouter.get('/', (request, response, next) => {
 // Handles GET:id requests
 blogsRouter.get('/:id', (request, response, next) => {
   const id = request.params.id
+
   Blog
-    .findById({ id })
+    .findById(id)
     .then(blog => {
       return response.json(blog)
     })
@@ -41,6 +42,18 @@ blogsRouter.post('/', (request, response, next) => {
     .save()
     .then(result => {
       response.status(201).json(result)
+    })
+    .catch((error) => next(error))
+})
+
+// Handles DELETE:id requests
+blogsRouter.delete('/:id', (request, response, next) => {
+  const id = request.params.id
+
+  Blog
+    .findByIdAndDelete(id)
+    .then(blog => {
+      return response.status(204).send()
     })
     .catch((error) => next(error))
 })

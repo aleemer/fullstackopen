@@ -48,12 +48,33 @@ test('id is a unique identifier for a blog', async () => {
   expect(listFn.uniqueArraySimple(blogIDs)).toBe(true)
 })
 
-// test('GET: viewing a specific blog', async () => {
-//   const id = 'test'
+test('GET: viewing a specific blog', async () => {
+  const blogs = await helper.blogsInDb()
+  const blogToGet = blogs[0]
+  const validId = blogToGet.id
 
-//   const response = await api.get(`/api/blogs/${id}`)
-//   console.log('response is ', response.body)
-// })
+  // Verify that we do get a blog
+  const response = await api
+    .get(`/api/blogs/${validId}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  // Verify that the blog we get is the desired one
+  const blogReceived = response.body
+  expect(listFn.sameObject(blogToGet, blogReceived)).toBe(true)
+})
+
+test('GET: fails if id is invalid', async () => {
+  const id = 'test'
+
+  // Verify that we get an error
+  const response = await api
+  .get(`/api/blogs/${id}`)
+  .expect(400)
+
+  // Verify that the error is the correct type
+  expect(listFn.sameObject(response.body, { error: 'malformatted id'})).toBe(true)
+})
 
 test('POST: a valid blog can be added', async () => {
   const newBlog = {
@@ -119,6 +140,34 @@ test('POST: url property missing causes 400', async () => {
     .post('/api/blogs')
     .send(noUrlBlog)
     .expect(400)
+})
+
+test('DELETE: succeeds with 204 if id is valid', async () => {
+  const oldBlogs = await helper.blogsInDb()
+  const blogToDelete = oldBlogs[0]
+  const validId = blogToDelete.id
+
+   // Verify that we perform a successful deletion
+   await api
+   .delete(`/api/blogs/${validId}`)
+   .expect(204)
+
+  // Verify that the blog we delete is the desired one
+  const newBlogs = await helper.blogsInDb()
+  expect(newBlogs).toHaveLength(oldBlogs.length - 1)
+  expect(listFn.sameObject(blogToDelete, newBlogs[0])).toBe(false)
+})
+
+test('DELETE: fails if id is invalid', async () => {
+  const id = 'test'
+
+  // Verify that we get an error
+  const response = await api
+  .delete(`/api/blogs/${id}`)
+  .expect(400)
+
+  // Verify that the error is the correct type
+  expect(listFn.sameObject(response.body, { error: 'malformatted id'})).toBe(true)
 })
 
 afterAll(async () => {
