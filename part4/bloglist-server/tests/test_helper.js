@@ -34,10 +34,16 @@ const usersInDb = async () => {
   return users.map(user => user.toJSON())
 }
 
-const getUserId = async () => {
+const getUserObjId = async () => {
   const users = await User.find({})
   const user = users[0]
   return user._id
+}
+
+const getUserId = async () => {
+  const users = await User.find({})
+  const user = users[0]
+  return user.toJSON().id
 }
 
 module.exports = {
@@ -45,5 +51,6 @@ module.exports = {
   initialUsers,
   blogsInDb,
   usersInDb,
+  getUserObjId,
   getUserId
 }
