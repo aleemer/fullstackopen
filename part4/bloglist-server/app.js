@@ -25,6 +25,9 @@ mongoose.connect(config.MONGODB_URI)
 app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+
+app.use(middleware.tokenExtractor)    // Add token extractor before routes, so it exists in request object
+
 app.use('/api/blogs', blogsRouter)    // Add Blog router for endpoints to that resource
 app.use('/api/users', usersRouter)    // Add User router for endpoints to that resource
 app.use('/api/login', loginRouter)    // Add Login router for endpoints to that resoruce
