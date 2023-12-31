@@ -152,50 +152,77 @@ describe('POST', () => {
     expect(JSON.stringify(user.id)).toEqual(JSON.stringify(blogAdded.user))
   })
   
-  // test('likes property missing defaults to 0', async () => {
-  //   // Get the id of the user performing add
-  //   const userId = await helper.getUserId()
+  test('likes property missing defaults to 0', async () => {
+    // Perform login and get token of user who is adding blog
+    const { username, password } = helper.initialUsers[0]
+    const login = await api
+      .post('/api/login')
+      .send({ username, password })
+      .expect(200)
+    const token = login.body.token
 
-  //   const unpopularBlog = {
-  //     title: 'My third blog',
-  //     author: 'Jack Doe',
-  //     url: 'http://www.example.com/blog3',
-  //   }
-  //   // add the blog
-  //   await api.post('/api/blogs').send({ ...unpopularBlog, userId })
-  //   // verify the blog has been added
-  //   const blogs = await helper.blogsInDb()
-  //   expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
-  //   // verify the blog added has likes:0
-  //   const blogAdded = blogs[2]
-  //   expect(blogAdded.likes).toEqual(0)
-  // })
+    const unpopularBlog = {
+      title: 'My third blog',
+      author: 'Jack Doe',
+      url: 'http://www.example.com/blog3',
+    }
+    // add the blog
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(unpopularBlog)
+
+    // verify the blog has been added
+    const blogs = await helper.blogsInDb()
+    expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
+    // verify the blog added has likes:0
+    const blogAdded = blogs[2]
+    expect(blogAdded.likes).toEqual(0)
+  })
   
-  // test('title property missing causes 400', async () => {
-  //   const noTitleBlog = {
-  //     author: 'Jack Doe',
-  //     url: 'http://www.example.com/blog3',
-  //     likes: 4
-  //   }
-  //   // add the blog, fail with 400
-  //   await api
-  //     .post('/api/blogs')
-  //     .send(noTitleBlog)
-  //     .expect(400)
-  // })
+  test('title property missing causes 400', async () => {
+    // Perform login and get token of user who is adding blog
+    const { username, password } = helper.initialUsers[0]
+    const login = await api
+      .post('/api/login')
+      .send({ username, password })
+      .expect(200)
+    const token = login.body.token
+
+    const noTitleBlog = {
+      author: 'Jack Doe',
+      url: 'http://www.example.com/blog3',
+      likes: 4
+    }
+    // add the blog, fail with 400
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(noTitleBlog)
+      .expect(400)
+  })
   
-  // test('url property missing causes 400', async () => {
-  //   const noUrlBlog = {
-  //     title: 'My third blog',
-  //     author: 'Jack Doe',
-  //     likes: 4
-  //   }
-  //   // add the blog, fail with 400
-  //   await api
-  //     .post('/api/blogs')
-  //     .send(noUrlBlog)
-  //     .expect(400)
-  // })
+  test('url property missing causes 400', async () => {
+    // Perform login and get token of user who is adding blog
+    const { username, password } = helper.initialUsers[0]
+    const login = await api
+      .post('/api/login')
+      .send({ username, password })
+      .expect(200)
+    const token = login.body.token
+
+    const noUrlBlog = {
+      title: 'My third blog',
+      author: 'Jack Doe',
+      likes: 4
+    }
+    // add the blog, fail with 400
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(noUrlBlog)
+      .expect(400)
+  })
 
   test('missing token causes authorization error', async () => {
 
