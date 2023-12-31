@@ -37,14 +37,25 @@ const tokenExtractor = (request, response, next) => {
 
 // Get the user and add it to the request object
 const userExtractor = async (request, response, next) => {
-  // const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  // if (!decodedToken.id) {
-  //   request.user = null
-  // } else {
-  //   request.user = await User.findById(decodedToken.id)
-  // }
-  next()
-}
+  // Check if the request has a token
+  if (!request.token) {
+    request.user = null;
+    return next();
+  }
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  if (!decodedToken.id) {
+    request.user = null;
+  } else {
+    const user = await User.findById(decodedToken.id);
+    if (!user) {
+      request.user = null;
+    } else {
+      request.user = user;
+    }
+  }
+  next();
+};
 
 module.exports = {
   unknownEndpoint,

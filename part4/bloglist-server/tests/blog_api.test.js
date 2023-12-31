@@ -128,8 +128,8 @@ describe('POST', () => {
     // add the blog
     await api
       .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
   

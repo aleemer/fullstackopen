@@ -20,15 +20,14 @@ blogsRouter.get('/:id', async (request, response) => {
 // Handles POST requests
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
-  const user = await User.findById(decodedToken.id)
+  const user = request.user 
 
   if (!body || !body.title || !body.url) {
     return response.status(400).send({ error: 'Content missing' })
+  }
+
+  if (!user) {
+    return response.status(401).send({ error: 'Unauthorized blog creation' })
   }
 
   const blog = new Blog({
@@ -57,18 +56,16 @@ blogsRouter.put('/:id', async (request, response) => {
 // Handles DELETE:id requests
 blogsRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const user = request.user
 
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
+  if (!user) {
+    return response.status(401).json({ error: 'Unauthorized deletion' })
   }
 
   // check if user deleting blog owns the blog
   const blog = await Blog.findById(id)
-  const user = await User.findById(decodedToken.id)
-
   if (JSON.stringify(blog.user) !== JSON.stringify(user._id)) {
-    return response.status(401).json({ error: 'unauthorized deletion' })
+    return response.status(401).json({ error: 'Unauthorized deletion' })
   }
 
   // delete blog, and update user to not have that blog id
