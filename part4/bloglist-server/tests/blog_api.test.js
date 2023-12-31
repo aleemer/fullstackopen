@@ -283,6 +283,7 @@ describe('DELETE', () => {
     expect(newBlogs).toHaveLength(oldBlogs.length - 1)
 
     // TODO: Verify that the deletion is reflected in the user
+    // Unnecessary for now, but in future, think about this
   })
   
   test('fails if token is invalid', async () => {
@@ -300,9 +301,37 @@ describe('DELETE', () => {
 
   test('fails if the deletion is unauthorized', async () => {
     // Create a new user and add to database
+    const newUser = {
+      username: 'mluukkai',
+      name: 'Matti Luukkainen',
+      password: 'salainen'
+    }
+
+    // add the user
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
     // Perform login with that user
-    // Delete a particular blog (not created by that user)
-    // Verify that deletion fails
+    const login = await api
+      .post('/api/login')
+      .send({ 
+        username: newUser.username,
+        password: newUser.password
+       })
+      .expect(200)
+    const token = login.body.token
+
+    // Try to delete a particular blog (not created by that user), verify it fails
+    const oldBlogs = await helper.blogsInDb()
+    const blogToDelete = oldBlogs[0]
+    const validId = blogToDelete.id
+    await api
+      .delete(`/api/blogs/${validId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(401)
   })
 })
 
