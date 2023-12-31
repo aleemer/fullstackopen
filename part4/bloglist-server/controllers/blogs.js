@@ -73,7 +73,7 @@ blogsRouter.delete('/:id', async (request, response) => {
 
   // delete blog, and update user to not have that blog id
   await Blog.findByIdAndDelete(id)
-  user.blogs = user.blogs.filter(blog => blog !== blog._id)
+  user.blogs = user.blogs.filter(b => JSON.stringify(b) !== JSON.stringify(blog._id))
   await user.save()
   response.status(204).end()
 })
