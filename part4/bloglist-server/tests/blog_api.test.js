@@ -23,7 +23,7 @@ beforeEach(async () => {
   const userPromiseArray = helper.initialUsers.map(async user => {
     // save user(s)
     const passwordHash = await bcrypt.hash(user.password, 10)
-    user = new User({ ...user, password: passwordHash })
+    user = new User({ ...user, passwordHash: passwordHash })
     return user.save()
   })
   await Promise.all(userPromiseArray)

@@ -7,13 +7,21 @@ const app = require('../app')
 const api = supertest(app)
 
 const User = require('../models/user')
+const Blog = require('../models/blog')
+
+const clearData = async () => {
+  await User.deleteMany({})
+  await Blog.deleteMany({})
+}
 
 beforeEach(async () => {
-  await User.deleteMany({}) // delete all users in our test database
+  // Clear database
+  await clearData()
+
   // save all users as promises, and resolve in parallel
   const promiseArray = helper.initialUsers.map(async user => {
     const passwordHash = await bcrypt.hash(user.password, 10)
-    user = new User({ ...user, password: passwordHash })
+    user = new User({ ...user, passwordHash: passwordHash })
     return user.save()
   })
   await Promise.all(promiseArray)
