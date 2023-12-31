@@ -225,7 +225,17 @@ describe('POST', () => {
   })
 
   test('missing token causes authorization error', async () => {
-
+    const newBlog = {
+      title: 'My third blog',
+      author: 'Jack Doe',
+      url: 'http://www.example.com/blog3',
+      likes: 4
+    }
+    // add the blog
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
   })
 })
 
