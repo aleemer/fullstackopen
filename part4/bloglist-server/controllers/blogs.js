@@ -57,7 +57,24 @@ blogsRouter.put('/:id', async (request, response) => {
 // Handles DELETE:id requests
 blogsRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  // check if user deleting blog owns the blog
+  const blog = await Blog.findById(id)
+  const user = await User.findById(decodedToken.id)
+
+  if (JSON.stringify(blog.user) !== JSON.stringify(user._id)) {
+    return response.status(401).json({ error: 'unauthorized deletion' })
+  }
+
+  // delete blog, and update user to not have that blog id
   await Blog.findByIdAndDelete(id)
+  user.blogs = user.blogs.filter(blog => blog !== blog._id)
+  await user.save()
   response.status(204).end()
 })
 

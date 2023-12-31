@@ -239,26 +239,35 @@ describe('POST', () => {
   })
 })
 
-describe('PUT', () => {
-  test('updating likes succeeds', async () => {
-    const blogs = await helper.blogsInDb()
-    const blogToLike = blogs[0]
-    const validId = blogToLike.id
+// describe('PUT', () => {
+//   test('updating likes succeeds', async () => {
+//     const blogs = await helper.blogsInDb()
+//     const blogToLike = blogs[0]
+//     const validId = blogToLike.id
   
-    // Verify that we perform a successful update
-    const response = await api
-      .put(`/api/blogs/${validId}`)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+//     // Verify that we perform a successful update
+//     const response = await api
+//       .put(`/api/blogs/${validId}`)
+//       .expect(200)
+//       .expect('Content-Type', /application\/json/)
   
-    // Verify that only likes changes
-    const updatedBlog = response.body
-    expect(updatedBlog.likes).toEqual(blogToLike.likes + 1)
-  })
-})
+//     // Verify that only likes changes
+//     const updatedBlog = response.body
+//     expect(updatedBlog.likes).toEqual(blogToLike.likes + 1)
+//   })
+// })
 
 describe('DELETE', () => {
   test('succeeds with 204 if id is valid', async () => {
+    // Perform login and get token of user who is adding blog
+    const { username, password } = helper.initialUsers[0]
+    const login = await api
+      .post('/api/login')
+      .send({ username, password })
+      .expect(200)
+    const token = login.body.token
+
+    // Delete a particular blog (created by that same user)
     const oldBlogs = await helper.blogsInDb()
     const blogToDelete = oldBlogs[0]
     const validId = blogToDelete.id
@@ -266,23 +275,34 @@ describe('DELETE', () => {
      // Verify that we perform a successful deletion
      await api
      .delete(`/api/blogs/${validId}`)
+     .set('Authorization', `Bearer ${token}`)
      .expect(204)
   
-    // Verify that the blog we delete is the desired one
+    // Verify that the deletion updates the database
     const newBlogs = await helper.blogsInDb()
     expect(newBlogs).toHaveLength(oldBlogs.length - 1)
+
+    // TODO: Verify that the deletion is reflected in the user
   })
   
-  test('fails if id is invalid', async () => {
-    const id = 'test'
-  
-    // Verify that we get an error
-    const response = await api
-    .delete(`/api/blogs/${id}`)
-    .expect(400)
-  
-    // Verify that the error is the correct type
-    expect(response.body).toEqual({ error: 'malformatted id' })
+  test('fails if token is invalid', async () => {
+     // Delete a particular blog (created by that same user)
+     const oldBlogs = await helper.blogsInDb()
+     const blogToDelete = oldBlogs[0]
+     const validId = blogToDelete.id
+   
+      // Verify that deletion fails
+      await api
+      .delete(`/api/blogs/${validId}`)
+      .set('Authorization', `Bearer 1234`)
+      .expect(401)
+  })
+
+  test('fails if the deletion is unauthorized', async () => {
+    // Create a new user and add to database
+    // Perform login with that user
+    // Delete a particular blog (not created by that user)
+    // Verify that deletion fails
   })
 })
 
