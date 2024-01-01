@@ -31,6 +31,7 @@ Full Stack Open is a comprehensive online course providing in-depth coverage of 
    - Token authentication
      
 ### Part 5: Testing React Apps
+   - Login in frontend
    - Testing React components and applications.
    - End to end testing
 
