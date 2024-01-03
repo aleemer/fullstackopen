@@ -24,9 +24,10 @@ const App = () => {
   // handle login
   const handleUserLogin = (e) => {
     e.preventDefault()
-    const username = e.target.username.value
-    const password = e.target.password.value
-    const user = { username, password }
+    const user = {
+      username: e.target.username.value,
+      password: e.target.password.value
+    }
     loginService
       .performLogin(user)
       .then((response) => {
@@ -46,11 +47,29 @@ const App = () => {
     helper.clear('userLogin')
   }
 
+  // handle blog creation
+  const handleCreateBlog = (e) => {
+    e.preventDefault()
+    const blog = {
+      title: e.target.title.value,
+      author: e.target.author.value,
+      url: e.target.url.value,
+    }
+    blogService
+      .createBlog(blog, user.token)
+      .then(() => {
+        helper.resetFields(e, ['title', 'author', 'url'])
+      })
+      .catch((error) => {
+        console.log(error.response.data)
+      })
+  }
+
   return (
     <div>
       {user == null 
       ? <LoginForm onLoginClick={handleUserLogin}/>
-      : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout}/>
+      : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout} onCreateClick={handleCreateBlog}/>
       }
     </div>
   )

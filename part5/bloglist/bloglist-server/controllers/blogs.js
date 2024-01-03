@@ -19,6 +19,7 @@ blogsRouter.get('/:id', async (request, response) => {
 
 // Handles POST requests
 blogsRouter.post('/', async (request, response) => {
+  console.log(request.token)
   const body = request.body
   const user = request.user 
 
