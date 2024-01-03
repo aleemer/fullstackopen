@@ -6,6 +6,9 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [user, setUser] = useState({})
+
+  console.log('user is', user)
 
   // On first load, state initialization
   useEffect(() => {
@@ -23,9 +26,12 @@ const App = () => {
     loginService
       .performLogin(user)
       .then((response) => {
-        console.log(response)
+        setUser(response)
+        helper.clearFields(e, ['username', 'password'])
       })
-      .catch((error) => console.log(error.response.data))
+      .catch((error) => {
+        console.log(error.response.data)
+      })
   }
 
   return (

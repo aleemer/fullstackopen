@@ -1,6 +1,7 @@
 // Helper fn to clear fields in forms
 const clearFields = (e, fields) => {
-  for (field of fields) {
+  e.preventDefault()
+  for (const field of fields) {
     e.target[field].value = ''
   }
 }
