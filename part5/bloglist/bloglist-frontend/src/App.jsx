@@ -13,9 +13,12 @@ const App = () => {
 
   // On first load, state initialization
   useEffect(() => {
+    // load in all blogs
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+      setBlogs(blogs)
+    )
+    // check localStorage for login
+    setUser(helper.get('userLogin'))  
   }, [])
 
   // handle login
@@ -28,18 +31,26 @@ const App = () => {
       .performLogin(user)
       .then((response) => {
         setUser(response)
-        helper.clearFields(e, ['username', 'password'])
+        helper.save('userLogin', response)
+        helper.resetFields(e, ['username', 'password'])
       })
       .catch((error) => {
         console.log(error.response.data)
       })
   }
 
+  // handle logout
+  const handleUserLogout = (e) => {
+    e.preventDefault()
+    setUser(null)
+    helper.clear('userLogin')
+  }
+
   return (
     <div>
       {user == null 
       ? <LoginForm onLoginClick={handleUserLogin}/>
-      : <Blogs user={user} blogs={blogs}/>
+      : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout}/>
       }
     </div>
   )
