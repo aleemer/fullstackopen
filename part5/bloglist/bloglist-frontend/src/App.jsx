@@ -11,12 +11,17 @@ const App = () => {
 
   console.log('user is', user)
 
-  // On first load, state initialization
-  useEffect(() => {
-    // load in all blogs
+  // Syncs data from database to local state
+  const syncBlogs = () => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
+  }
+
+  // On first load, state initialization
+  useEffect(() => {
+    // load in all blogs
+    syncBlogs()
     // check localStorage for login
     setUser(helper.get('userLogin'))  
   }, [])
@@ -58,6 +63,7 @@ const App = () => {
     blogService
       .createBlog(blog, user.token)
       .then(() => {
+        syncBlogs()
         helper.resetFields(e, ['title', 'author', 'url'])
       })
       .catch((error) => {
