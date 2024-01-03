@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import helper from './utils/helper'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
+import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -19,7 +20,12 @@ const App = () => {
     const username = e.target.username.value
     const password = e.target.password.value
     const user = { username, password }
-    console.log('attempting login with ', user)
+    loginService
+      .performLogin(user)
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => console.log(error.response.data))
   }
 
   return (
@@ -31,9 +37,6 @@ const App = () => {
         <button type="submit">login</button>
       </form>
       <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
     </div>
   )
 }
