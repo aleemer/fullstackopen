@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import helper from './utils/helper'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import LoginForm from './components/LoginForm'
+import Blogs from './components/Blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState(null)
 
   console.log('user is', user)
 
@@ -36,13 +37,10 @@ const App = () => {
 
   return (
     <div>
-      <h2>log in to application</h2>
-      <form onSubmit={handleUserLogin}>
-        <div>username<input id="username" name="username" required/></div>
-        <div>password<input id="password" name="password" required/></div>
-        <button type="submit">login</button>
-      </form>
-      <h2>blogs</h2>
+      {user == null 
+      ? <LoginForm onLoginClick={handleUserLogin}/>
+      : <Blogs user={user} blogs={blogs}/>
+      }
     </div>
   )
 }
