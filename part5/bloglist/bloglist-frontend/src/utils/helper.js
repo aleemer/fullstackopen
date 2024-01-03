@@ -1,4 +1,3 @@
-
 // Helper fn to set local storage, assumes key is string, val is object
 const save = (key, val) => {
   localStorage.setItem(key, JSON.stringify(val))
@@ -22,4 +21,12 @@ const resetFields = (e, fields) => {
   }
 }
 
-export default { save, get, clear, resetFields }
+// helper fn that performs callback1, and then callback2 within a timeout
+const callWithTimeout = (ms, callback1, callback2) => {
+  callback1()
+  setTimeout(() => {
+    callback2()
+  }, ms)
+}
+
+export default { save, get, clear, resetFields, callWithTimeout }

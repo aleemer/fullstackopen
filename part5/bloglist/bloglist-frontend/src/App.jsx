@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react'
 import helper from './utils/helper'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-
-  console.log('user is', user)
+  const [message, setMessage] = useState(null)
 
   // Syncs data from database to local state
   const syncBlogs = () => {
@@ -26,6 +26,14 @@ const App = () => {
     setUser(helper.get('userLogin'))  
   }, [])
 
+  // notification handlers
+  const updateNotification = (content, error) => {
+    setMessage((prev) => ({ ...prev, content, error }));
+  }
+  const clearNotification = () => {
+    setMessage(null);
+  }
+
   // handle login
   const handleUserLogin = (e) => {
     e.preventDefault()
@@ -38,10 +46,19 @@ const App = () => {
       .then((response) => {
         setUser(response)
         helper.save('userLogin', response)
+        helper.callWithTimeout(
+            2500,
+            () => updateNotification(`${response.name} logged in`, false),
+            () => clearNotification()
+          )
         helper.resetFields(e, ['username', 'password'])
       })
       .catch((error) => {
-        console.log(error.response.data)
+        helper.callWithTimeout(
+          5000,
+          () => updateNotification(`${error.response.data.error}`, true),
+          () => clearNotification()
+        )
       })
   }
 
@@ -62,17 +79,29 @@ const App = () => {
     }
     blogService
       .createBlog(blog, user.token)
-      .then(() => {
+      .then((response) => {
         syncBlogs()
+        helper.callWithTimeout(
+          2500,
+          () => updateNotification(`a new blog ${response.title} by ${response.author}`, false),
+          () => clearNotification()
+        )
         helper.resetFields(e, ['title', 'author', 'url'])
       })
       .catch((error) => {
-        console.log(error.response.data)
+        helper.callWithTimeout(
+          5000,
+          () => updateNotification(`${error.response.data.error}`, true),
+          () => clearNotification()
+        )
       })
   }
 
   return (
     <div>
+      {message == null
+      ? null
+      : <Notification message={message}/>}
       {user == null 
       ? <LoginForm onLoginClick={handleUserLogin}/>
       : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout} onCreateClick={handleCreateBlog}/>
