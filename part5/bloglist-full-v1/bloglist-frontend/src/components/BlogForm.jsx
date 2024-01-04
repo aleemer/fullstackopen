@@ -3,10 +3,10 @@ const BlogForm = ({ onCreateClick }) => {
     <div>
       <h2>create new</h2>
       <form onSubmit={onCreateClick}>
-        <div>title:<input name="title" required/></div>
-        <div>author:<input name="author" required/></div>
-        <div>url:<input name="url" required/></div>
-        <button type="submit">create</button>
+        <div>title:<input id="title" name="title" required/></div>
+        <div>author:<input id="author" name="author" required/></div>
+        <div>url:<input id="url" name="url" required/></div>
+        <button id="create-button" type="submit">create</button>
       </form>
     </div>
   )

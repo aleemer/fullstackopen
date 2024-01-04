@@ -5,7 +5,7 @@ const LoginForm = ({ onLoginClick }) => {
       <form onSubmit={onLoginClick}>
         <div>username<input id="username" name="username" required/></div>
         <div>password<input id="password" name="password" required/></div>
-        <button type="submit">login</button>
+        <button id="login-button" type="submit">login</button>
       </form>
     </div>
   )
