@@ -9,7 +9,10 @@ const Blogs = ({ blogs, user, onLogoutClick, onCreateClick, onLikeClick, blogFor
     <Togglable buttonLabel='create' ref={blogFormRef}>
       <BlogForm onCreateClick={onCreateClick}/>
     </Togglable>
-    {blogs.map(blog => <Blog key={blog.id} blog={blog} onLikeClick={onLikeClick}/>)}
+    {blogs
+      .sort((a, b) => b.likes - a.likes)
+      .map(blog => <Blog key={blog.id} blog={blog} onLikeClick={onLikeClick}/>)
+    }
   </div>  
 )
 
