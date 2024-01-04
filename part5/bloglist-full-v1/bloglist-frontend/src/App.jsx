@@ -101,6 +101,12 @@ const App = () => {
       })
   }
 
+  // handle liking a blog
+  const handleLikeBlog = (e, id) => {
+    e.preventDefault()
+    console.log('clicking like on blog ', id)
+  }
+
   return (
     <div>
       {message == null
@@ -109,7 +115,7 @@ const App = () => {
       {user == null 
       ? <LoginForm onLoginClick={handleUserLogin}/>
       : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout} 
-        onCreateClick={handleCreateBlog} blogFormRef={blogFormRef}/>
+        onCreateClick={handleCreateBlog} onLikeClick={handleLikeBlog} blogFormRef={blogFormRef}/>
       }
     </div>
   )
