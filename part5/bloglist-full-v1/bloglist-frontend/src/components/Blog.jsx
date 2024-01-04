@@ -27,19 +27,19 @@ const Blog = ({ user, blog, onLikeClick, onRemoveClick }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       <div className="default-blog-display">
-        {blog.title} {blog.author}
-        <button id="view-details" onClick={handleClickShow}>{show ? 'hide' : 'show'}</button>
+        <span className="blog-details">{blog.title} {blog.author}</span>
+        <button className="view-details" onClick={handleClickShow}>{show ? 'hide' : 'show'}</button>
       </div>
       {show &&
       <div className="hidden-blog-display">
         <div>{blog.url}</div>
-        <div>likes {blog.likes}<button id="like-blog" onClick={(e) => onLikeClick(e, blog.id)}>like</button></div>
+        <div>likes {blog.likes}<button className="like-blog" onClick={(e) => onLikeClick(e, blog.id)}>like</button></div>
         <div>{blog.user.name}</div>
-        {showRemove() && <button id="remove-blog" onClick={(e) => handleClickRemove(e, blog.id)}>remove</button>}
+        {showRemove() && <button className="remove-blog" onClick={(e) => handleClickRemove(e, blog.id)}>remove</button>}
       </div>}
-  </div>
+    </div>
   )
 }
 
