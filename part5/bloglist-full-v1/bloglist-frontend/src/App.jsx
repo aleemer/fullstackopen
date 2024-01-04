@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import helper from './utils/helper'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -10,6 +10,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+
+  // Refs
+  const blogFormRef = useRef()
 
   // Syncs data from database to local state
   const syncBlogs = () => {
@@ -80,6 +83,7 @@ const App = () => {
     blogService
       .createBlog(blog, user.token)
       .then((response) => {
+        blogFormRef.current.toggleVisibility() // uses ref to update state inside child
         syncBlogs()
         helper.callWithTimeout(
           2500,
@@ -91,7 +95,7 @@ const App = () => {
       .catch((error) => {
         helper.callWithTimeout(
           5000,
-          () => updateNotification(`${error.response.data.error}`, true),
+          () => updateNotification(`${error.response.data}`, true),
           () => clearNotification()
         )
       })
@@ -104,7 +108,8 @@ const App = () => {
       : <Notification message={message}/>}
       {user == null 
       ? <LoginForm onLoginClick={handleUserLogin}/>
-      : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout} onCreateClick={handleCreateBlog}/>
+      : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout} 
+        onCreateClick={handleCreateBlog} blogFormRef={blogFormRef}/>
       }
     </div>
   )
