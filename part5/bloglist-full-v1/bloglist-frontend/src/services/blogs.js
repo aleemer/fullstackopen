@@ -15,4 +15,9 @@ const createBlog = (blog, token) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, createBlog }
+const likeBlog = (id) => {
+  const request = axios.put(`${baseUrl}/${id}`)
+  return request.then(response => response.data)
+}
+
+export default { getAll, createBlog, likeBlog }

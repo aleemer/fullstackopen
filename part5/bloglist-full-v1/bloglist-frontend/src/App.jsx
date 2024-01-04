@@ -95,7 +95,7 @@ const App = () => {
       .catch((error) => {
         helper.callWithTimeout(
           5000,
-          () => updateNotification(`${error.response.data}`, true),
+          () => updateNotification(`${error.response.data.error}`, true),
           () => clearNotification()
         )
       })
@@ -105,6 +105,23 @@ const App = () => {
   const handleLikeBlog = (e, id) => {
     e.preventDefault()
     console.log('clicking like on blog ', id)
+    blogService
+      .likeBlog(id)
+      .then((response) => {
+        syncBlogs()
+        helper.callWithTimeout(
+          2500,
+          () => updateNotification(`liked blog ${response.title} by ${response.author}`, false),
+          () => clearNotification()
+        )
+      })
+      .catch((error) => {
+        helper.callWithTimeout(
+          5000,
+          () => updateNotification(`${error.response.data.error}`, true),
+          () => clearNotification()
+        )
+      })
   }
 
   return (
