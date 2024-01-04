@@ -34,6 +34,12 @@ app.use('/api/blogs',
 app.use('/api/users', usersRouter)    // Add User router for endpoints to that resource
 app.use('/api/login', loginRouter)    // Add Login router for endpoints to that resoruce
 
+// Route that resets test database
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
+
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
