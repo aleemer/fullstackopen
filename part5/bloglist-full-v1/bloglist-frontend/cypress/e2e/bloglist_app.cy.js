@@ -38,4 +38,56 @@ describe('Blog app', () => {
       cy.get('#notification').contains('invalid username or password')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      // perform a login
+      cy.get('#username').type('mluukai')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function() {
+      // open the blog form
+      cy.get('#toggle-button').click()
+      // type in details
+      cy.get('#title').type('Another blog')
+      cy.get('#author').type('Gray Prince')
+      cy.get('#url').type('http://www.test.com')
+      cy.get('#create-button').click()
+
+      // blog must be present
+      cy.contains('Another blog Gray Prince')
+    })
+
+    describe('Blog created', function() {
+      beforeEach(function() {
+        // open the blog form
+        cy.get('#toggle-button').click()
+        // type in details
+        cy.get('#title').type('Another blog')
+        cy.get('#author').type('Gray Prince')
+        cy.get('#url').type('http://www.test.com')
+        cy.get('#create-button').click()
+      })
+
+      it('User can like a blog', function() {
+        // Open details
+        cy.get('#view-details').click()
+        // Like blog & confirm
+        cy.get('#like-blog').click()
+        cy.contains('likes 1')
+      })
+
+      it('Creator can delete blog', function() {
+        // Open details
+        cy.get('#view-details').click()
+        // Perform deletion
+        cy.get('#remove-blog').click()
+        // Confirm deletion
+        cy.get('.default-blog-display').should('not.exist')
+        cy.get('.hidden-blog-display').should('not.exist')
+      })
+    })
+  })
 })
