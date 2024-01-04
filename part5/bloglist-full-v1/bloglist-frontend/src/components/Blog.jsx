@@ -28,18 +28,19 @@ const Blog = ({ user, blog, onLikeClick, onRemoveClick }) => {
 
   return (
     <div style={blogStyle}>
-      <div>
+      <div className="default-blog-display">
         {blog.title} {blog.author}
         <button onClick={handleClickShow}>{show ? 'hide' : 'show'}</button>
       </div>
       {show &&
-      <>
+      <div className="hidden-blog-display">
         <div>{blog.url}</div>
         <div>likes {blog.likes}<button onClick={(e) => onLikeClick(e, blog.id)}>like</button></div>
         <div>{blog.user.name}</div>
         {showRemove() && <button onClick={(e) => handleClickRemove(e, blog.id)}>remove</button>}
-      </>}
+      </div>}
   </div>
-)}
+  )
+}
 
 export default Blog
