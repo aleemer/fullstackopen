@@ -28,6 +28,7 @@ test('only render title and author by default', () => {
 })
 
 test('blog URL and number of likes now visible that button clicked', async () => {
+  const user = userEvent.setup()
   const blog = {
     title: 'This is a blog',
     author: 'Ron Jeffries',
@@ -41,8 +42,7 @@ test('blog URL and number of likes now visible that button clicked', async () =>
 
   render(<Blog blog={blog} user={blog.user}/>)
 
-  // Perform click
-  const user = userEvent.setup()
+  // Show details
   const button = screen.queryByText('show')
   await user.click(button)
 
@@ -51,4 +51,33 @@ test('blog URL and number of likes now visible that button clicked', async () =>
   const url = screen.queryByText(`${blog.url}`)
   expect(likes).toBeInTheDocument()
   expect(url).toBeInTheDocument()
+})
+
+test('like button clicked twice means two fn calls made', async () => {
+  const likeFn = jest.fn()
+  const user = userEvent.setup()
+  const blog = {
+    title: 'This is a blog',
+    author: 'Ron Jeffries',
+    url: 'http://www.test.com',
+    user: {
+      name: 'John Doe',
+      username: 'J'
+    },
+    likes: 2
+  }
+
+  render(<Blog blog={blog} user={blog.user} onLikeClick={likeFn}/>)
+
+  // Show like button
+  const button = screen.queryByText('show')
+  await user.click(button)
+
+  // Click like button twice
+  const likeButton = screen.queryByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  // Has two calls
+  expect(likeFn.mock.calls).toHaveLength(2)
 })
