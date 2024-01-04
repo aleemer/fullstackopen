@@ -104,7 +104,6 @@ const App = () => {
   // handle liking a blog
   const handleLikeBlog = (e, id) => {
     e.preventDefault()
-    console.log('clicking like on blog ', id)
     blogService
       .likeBlog(id)
       .then((response) => {
@@ -112,6 +111,27 @@ const App = () => {
         helper.callWithTimeout(
           2500,
           () => updateNotification(`liked blog ${response.title} by ${response.author}`, false),
+          () => clearNotification()
+        )
+      })
+      .catch((error) => {
+        helper.callWithTimeout(
+          5000,
+          () => updateNotification(`${error.response.data.error}`, true),
+          () => clearNotification()
+        )
+      })
+  }
+
+  // handle deleting a blog
+  const handleDeleteBlog = (id) => {
+    blogService
+      .deleteBlog(id, user.token)
+      .then(() => {
+        syncBlogs()
+        helper.callWithTimeout(
+          2500,
+          () => updateNotification('deleted blog', false),
           () => clearNotification()
         )
       })
@@ -132,7 +152,8 @@ const App = () => {
       {user == null 
       ? <LoginForm onLoginClick={handleUserLogin}/>
       : <Blogs user={user} blogs={blogs} onLogoutClick={handleUserLogout} 
-        onCreateClick={handleCreateBlog} onLikeClick={handleLikeBlog} blogFormRef={blogFormRef}/>
+        onCreateClick={handleCreateBlog} onLikeClick={handleLikeBlog} 
+        onRemoveClick={handleDeleteBlog} blogFormRef={blogFormRef}/>
       }
     </div>
   )

@@ -20,4 +20,13 @@ const likeBlog = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, createBlog, likeBlog }
+const deleteBlog = (id, token) => {
+  const request = axios.delete(`${baseUrl}/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  return request.then(response => response.data)
+}
+
+export default { getAll, createBlog, likeBlog, deleteBlog }
