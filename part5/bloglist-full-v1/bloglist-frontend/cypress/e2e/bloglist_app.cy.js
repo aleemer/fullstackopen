@@ -89,5 +89,39 @@ describe('Blog app', () => {
         cy.get('.hidden-blog-display').should('not.exist')
       })
     })
+
+    describe('Blog created and user logged out', function() {
+      beforeEach(function() {
+        // open the blog form
+        cy.get('#toggle-button').click()
+        // type in details
+        cy.get('#title').type('Another blog')
+        cy.get('#author').type('Gray Prince')
+        cy.get('#url').type('http://www.test.com')
+        cy.get('#create-button').click()
+
+        cy.get('#logout-button').click()
+      })
+
+      it('Only creator can see delete button', function() {
+        // create new user and login
+        const altUser = {
+          name: 'Aleem Tariq',
+          username: 'aleemer',
+          password: 'djinn'
+        }
+        cy.request('POST', 'http://localhost:3001/api/users', altUser)
+
+        // perform a login
+        cy.get('#username').type('aleemer')
+        cy.get('#password').type('djinn')
+        cy.get('#login-button').click()
+
+        // View blog
+        cy.get('#view-details').click()
+        // Cannot see remove button
+        cy.get('#remove-button').should('not.exist')
+      })
+    })
   })
 })

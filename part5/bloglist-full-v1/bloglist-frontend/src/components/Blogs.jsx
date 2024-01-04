@@ -5,7 +5,7 @@ import Blog from './Blog'
 const Blogs = ({ blogs, user, onLogoutClick, onCreateClick, onLikeClick, onRemoveClick, blogFormRef }) => (
   <div>
     <h2>blogs</h2>
-    <p>{user.username} logged in <button onClick={onLogoutClick}>logout</button></p>
+    <p>{user.username} logged in <button id="logout-button" onClick={onLogoutClick}>logout</button></p>
     <Togglable buttonLabel='create' ref={blogFormRef}>
       <BlogForm onCreateClick={onCreateClick}/>
     </Togglable>
